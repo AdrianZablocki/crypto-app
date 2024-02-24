@@ -1,7 +1,8 @@
-import { Component} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { CmcService } from 'src/app/services/cmc-service/cmc.service';
 
 @Component({
   selector: 'app-home',
@@ -10,8 +11,11 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
-  constructor() { }
+  constructor(private cmcService: CmcService) { }
 
+  ngOnInit(): void {
+      this.cmcService.getCoins().subscribe(res => console.log(res))
+  }
 }

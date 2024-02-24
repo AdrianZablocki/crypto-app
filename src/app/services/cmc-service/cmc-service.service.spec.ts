@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CmcServiceService } from './cmc-service.service';
+import { CmcService } from './cmc.service';
 
 describe('CmcServiceService', () => {
-  let service: CmcServiceService;
+  let service: CmcService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CmcServiceService);
+    service = TestBed.inject(CmcService);
   });
 
   it('should be created', () => {

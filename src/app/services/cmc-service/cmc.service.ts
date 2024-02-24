@@ -7,7 +7,7 @@ import { env } from 'env';
 @Injectable({
   providedIn: 'root'
 })
-export class CmcServiceService {
+export class CmcService {
 
   constructor(private http: HttpClient) { }
 
