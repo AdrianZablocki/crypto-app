@@ -27,7 +27,7 @@ export class HomePage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.data$ = this.cmcService.getCoins();
     // ,orderBookL2_25:SUIUSD //FTTUSDT
-    this.initializeSocketConnection('subscribe=orderBookL2_25:DOGE');
+    // this.initializeSocketConnection('subscribe=orderBookL2_25:DOGE');
   }
 
   ngOnDestroy() {
