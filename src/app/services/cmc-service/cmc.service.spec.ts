@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { CmcService } from './cmc.service';
 
-describe('CmcServiceService', () => {
+describe('CmcService', () => {
   let service: CmcService;
 
   beforeEach(() => {
