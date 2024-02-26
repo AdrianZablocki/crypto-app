@@ -9,7 +9,12 @@ export const routes: Routes = [
       {
         path: 'main',
         loadComponent: () =>
-          import('../../pages/crypto/crypto.page').then((m) => m.CryptoPage),
+          import('../main/main.page').then((m) => m.MainPage),
+      },
+      {
+        path: 'crypto',
+        loadComponent: () =>
+          import('../crypto/crypto.page').then((m) => m.CryptoPage),
       },
       {
         path: '',

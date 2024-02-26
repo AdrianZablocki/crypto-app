@@ -8,7 +8,7 @@ import { personCircleOutline } from 'ionicons/icons';
 
 import { CmcService } from 'src/app/services/cmc-service/cmc.service';
 import { WsService } from 'src/app/services/ws-service/ws.service';
-import { ChartComponent, SegmentsTabsComponent } from 'src/app/components';
+import { ChartComponent, SegmentsTabsComponent, ToolbarComponent } from 'src/app/components';
 
 @Component({
   selector: 'app-crypto',
@@ -16,11 +16,12 @@ import { ChartComponent, SegmentsTabsComponent } from 'src/app/components';
   styleUrls: ['./crypto.page.scss'],
   standalone: true,
   imports: [
-    SegmentsTabsComponent,
-    IonicModule,
     ChartComponent,
     CommonModule,
-    FormsModule
+    FormsModule,
+    IonicModule,
+    SegmentsTabsComponent,
+    ToolbarComponent
   ]
 })
 export class CryptoPage implements OnInit, OnDestroy, AfterViewInit {
