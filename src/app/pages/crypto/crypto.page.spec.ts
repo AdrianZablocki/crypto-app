@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HomePage } from './home.page';
+import { CryptoPage } from './crypto.page';
 
 describe('HomePage', () => {
-  let component: HomePage;
-  let fixture: ComponentFixture<HomePage>;
+  let component: CryptoPage;
+  let fixture: ComponentFixture<CryptoPage>;
 
   beforeEach(async(() => {
-    fixture = TestBed.createComponent(HomePage);
+    fixture = TestBed.createComponent(CryptoPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

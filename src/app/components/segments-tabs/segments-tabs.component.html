@@ -1,0 +1,17 @@
+@if (tabConfig) {
+  <ion-segment [(ngModel)]="selectedTab">
+    @for (tab of tabConfig; track $index) {
+      <ion-segment-button [value]="tab.name">
+        <ion-label>{{tab.name}}</ion-label>
+      </ion-segment-button>
+    }
+  </ion-segment>
+
+
+  @for (tab of tabConfig; track $index) {
+    @if (tab.tmpl && selectedTab === tab.name) {
+      <ng-template [ngTemplateOutlet]="tab.tmpl"></ng-template>
+    }
+  }
+}
+
