@@ -5,12 +5,12 @@ import { home } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tabs',
-  templateUrl: 'tabs.page.html',
-  styleUrls: ['tabs.page.scss'],
+  templateUrl: 'pages-tabs.component.html',
+  styleUrls: ['pages-tabs.component.scss'],
   standalone: true,
   imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })
-export class TabsPage {
+export class PagesTabsComponent {
   public environmentInjector = inject(EnvironmentInjector);
 
   constructor() {

@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
-import { TabsPage } from './tabs.page';
+import { PagesTabsComponent } from './pages-tabs.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: TabsPage,
+    component: PagesTabsComponent,
     children: [
       {
         path: 'main',
         loadComponent: () =>
-          import('../pages/crypto/crypto.page').then((m) => m.CryptoPage),
+          import('../../pages/crypto/crypto.page').then((m) => m.CryptoPage),
       },
       {
         path: '',
