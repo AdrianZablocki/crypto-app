@@ -56,3 +56,10 @@ ion-content::part(scroll) {
 ion-searchbar .searchbar-input-container input {
   border-radius: 20px!important;
 }
+
+.list-ios {
+  border-radius: 25px;
+  &.list-inset {
+    margin: 0;
+  }
+}

@@ -1,17 +1,11 @@
 <app-toolbar></app-toolbar>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-
-  <ion-list>
-    <ion-item *ngFor="let item of data$ | async">
-      <ion-label>
-        <img [src]="test(item.id)" [alt]="item.name" class="image">
-        {{item.name}}
-      </ion-label>
-      
-      {{item.id}}
-    </ion-item>
-
+  
+  <ion-list mode="ios" [inset]="true">
+    @for (item of data$ | async; track item.name) {
+      <app-list-item [item]="item" itemType="tradeItem" firstName="huj"></app-list-item>
+    }
   </ion-list>
   
 </ion-content>

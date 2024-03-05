@@ -1,0 +1,43 @@
+ion-label {
+  display: flex!important;
+  align-items: center;
+}
+
+.image {
+  width: 36px;
+  height: 36px;
+  margin-right: 20px;
+}
+
+.name {
+  font-weight: 600;
+  letter-spacing: .6px;
+}
+
+.amount,
+.symbol {
+  color: var(--ion-color-tertiary);
+}
+
+.amount,
+.symbol,
+.percentage {
+  margin-top: 4px;
+}
+
+.data {
+  text-align: right;
+
+  .change {
+    color: var(--ion-color-tertiary);
+  }
+
+  .positive {
+    color: var(--ion-color-success);
+  }
+
+  .negative {
+    color: var(--ion-color-danger);
+  }
+
+}
