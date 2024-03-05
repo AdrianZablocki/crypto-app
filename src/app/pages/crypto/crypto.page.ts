@@ -1,10 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { addIcons } from 'ionicons';
-import { personCircleOutline } from 'ionicons/icons';
 
 import { CmcService } from 'src/app/services/cmc-service/cmc.service';
 import { WsService } from 'src/app/services/ws-service/ws.service';
@@ -17,8 +13,6 @@ import { ChartComponent, SegmentsTabsComponent, ToolbarComponent } from 'src/app
   standalone: true,
   imports: [
     ChartComponent,
-    CommonModule,
-    FormsModule,
     IonicModule,
     SegmentsTabsComponent,
     ToolbarComponent
@@ -39,9 +33,7 @@ export class CryptoPage implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private cmcService: CmcService,
     private wsService: WsService
-  ) {
-    addIcons({ personCircleOutline })
-  }
+  ) { }
 
   ngOnInit(): void {
     this.data$ = this.cmcService.getCoins();

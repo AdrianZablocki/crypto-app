@@ -25,7 +25,34 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+ion-app {
+
+  &.ios {
+    margin-top: 58px;
+
+    ion-content {
+      overflow-y: scroll;
+    }
+
+  }
+
+  background-color: var(--ion-color-dark);
+  color: var(--ion-color-light);
+}
 
 .ion-page {
   justify-content: flex-start;
+}
+
+ion-content::part(background) {
+  background-color: var(--ion-color-dark);
+}
+
+
+ion-content::part(scroll) {
+  color: var(--ion-color-light);
+}
+
+ion-searchbar .searchbar-input-container input {
+  border-radius: 20px!important;
 }

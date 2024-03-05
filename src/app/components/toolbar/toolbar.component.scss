@@ -1,0 +1,32 @@
+ion-toolbar {
+  padding: 16px !important;
+  --background: var(--ion-color-secondary);
+  --opacity-scale: inherit;
+  width: 100%;
+  display: flex;
+}
+
+ion-buttons {
+  display: flex;
+  align-self: stretch;
+}
+
+ion-button {
+  margin-right: 8px;
+
+  &:last-child {
+    margin: 0;
+  }
+}
+
+ion-button::part(native) {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: var(--ion-color-tertiary);
+  color: var(--ion-color-light);
+}
+
+ion-searchbar {
+  padding: 0 16px;
+}

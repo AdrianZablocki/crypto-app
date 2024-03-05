@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { env } from 'env';
+import { ICMCResponse } from 'src/app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class CmcService {
 
   constructor(private http: HttpClient) { }
 
-  getCoins(): Observable<unknown> {
+  getCoins(): Observable<any> {
     const headers = new HttpHeaders()
       .set('X-CMC_PRO_API_KEY', env.API_KEY)
       .set('Accept', 'application/json');

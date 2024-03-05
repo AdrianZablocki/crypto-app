@@ -8,7 +8,7 @@ import { home, logoBitcoin } from 'ionicons/icons';
   templateUrl: 'pages-tabs.component.html',
   styleUrls: ['pages-tabs.component.scss'],
   standalone: true,
-  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
+  imports: [ IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })
 export class PagesTabsComponent {
   public environmentInjector = inject(EnvironmentInjector);
