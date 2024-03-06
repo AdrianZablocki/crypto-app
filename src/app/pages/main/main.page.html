@@ -4,7 +4,12 @@
   
   <ion-list mode="ios" [inset]="true">
     @for (item of data$ | async; track item.name) {
-      <app-list-item [item]="item" itemType="tradeItem" firstName="huj"></app-list-item>
+      <app-list-item
+        [item]="item"
+        itemType="walletItem"
+        (selectItem)="onSelectListItem($event)"
+        >
+      </app-list-item>
     }
   </ion-list>
   

@@ -1,39 +1,42 @@
 @if (item) {
-  <ion-item [class]="item.name" color="primary">
+  <div (click)="onSelectItem(item)">
+    <ion-item [class]="item.name" color="primary">
 
-    <ion-label>
-      <img [src]="getIconUrl(item.id)" [alt]="item.name" class="image">
-      <div>
-        <div class="name">{{ item.name }}</div>
+      <ion-label>
+        <img [src]="getIconUrl(item.id)" [alt]="item.name" class="image">
+        <div>
+          <div class="name">{{ item.name }}</div>
+          @switch (itemType) {
+            @case ('walletItem') {
+              <div class="amount">{{ item.amount }}{{ item.symbol }} {{ item.quote.USD.price | currency : 'USD' : 'symbol' }}</div>
+            }
+            @case ('tradeItem') {
+              <div class="symbol">{{ item.symbol }} to USD</div>
+            }
+            @default {
+              <div class="symbol">{{ item.symbol }} to USD</div>
+            }
+          }
+        </div>
+      </ion-label>
+
+      <div class="data">
         @switch (itemType) {
           @case ('walletItem') {
-            <div class="amount">{{ item.amount }}{{ item.symbol }} {{ item.quote.USD.price | currency : 'USD' : 'symbol' }}</div>
+            <ng-container *ngTemplateOutlet="walletDataTmpl"></ng-container>
           }
           @case ('tradeItem') {
-            <div class="symbol">{{ item.symbol }} to USD</div>
+            <ng-container *ngTemplateOutlet="tradeDataTmpl"></ng-container>
           }
           @default {
-            <div class="symbol">{{ item.symbol }} to USD</div>
+            <ng-container *ngTemplateOutlet="tradeDataTmpl"></ng-container>
           }
         }
       </div>
-    </ion-label>
+      
+    </ion-item>
+  </div>
 
-    <div class="data">
-      @switch (itemType) {
-        @case ('walletItem') {
-          <ng-container *ngTemplateOutlet="walletDataTmpl"></ng-container>
-        }
-        @case ('tradeItem') {
-          <ng-container *ngTemplateOutlet="tradeDataTmpl"></ng-container>
-        }
-        @default {
-          <ng-container *ngTemplateOutlet="tradeDataTmpl"></ng-container>
-        }
-      }
-    </div>
-    
-  </ion-item>
 }
 
 <ng-template #tradeDataTmpl>
@@ -42,7 +45,9 @@
 </ng-template>
 
 <ng-template #walletDataTmpl>
-  <div>{{ item.amount * item.quote.USD.price | currency : 'USD' : 'symbol' }}</div>
+  @if (item.amount) {
+    <div>{{ item.amount * item.quote.USD.price | currency : 'USD' : 'symbol' }}</div>
+  }
   <ng-container *ngTemplateOutlet="percentageChangeTmpl; context: { change: item.quote.USD.percent_change_60d }"></ng-container>
 </ng-template>
 

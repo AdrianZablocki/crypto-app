@@ -5,6 +5,7 @@ import { Observable, map } from 'rxjs';
 
 import { ToolbarComponent } from 'src/app/components';
 import { ListItemComponent } from 'src/app/components/list-item/list-item.component';
+import { ICryptoCurrency } from 'src/app/models';
 import { CmcService } from 'src/app/services/cmc-service/cmc.service';
 
 @Component({
@@ -23,6 +24,10 @@ export class MainPage implements OnInit {
 
   ngOnInit(): void {
       this.data$ = this.cmcService.getCoins().pipe(map((res) => res.data));
+  }
+
+  onSelectListItem(item: ICryptoCurrency): void {
+    console.log('selected item', item);
   }
 
 }
