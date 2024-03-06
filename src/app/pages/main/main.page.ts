@@ -3,31 +3,38 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Observable, map } from 'rxjs';
 
-import { ToolbarComponent } from 'src/app/components';
-import { ListItemComponent } from 'src/app/components/list-item/list-item.component';
-import { ICryptoCurrency } from 'src/app/models';
-import { CmcService } from 'src/app/services/cmc-service/cmc.service';
+import { ListItemComponent, ModalComponent, ToolbarComponent } from 'src/app/components';
+import { ICryptoCurrency, ListItemTypeEnum, ModalType, ModalTypeEnum } from 'src/app/models';
+import { CmcService } from 'src/app/services';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
-  imports: [IonicModule, ToolbarComponent, CommonModule, ListItemComponent]
+  imports: [IonicModule, ToolbarComponent, CommonModule, ListItemComponent, ModalComponent]
 })
 export class MainPage implements OnInit {
   data$!: Observable<any>;
-  
+  isModalOpen = false;
+  openedModalType: ModalType = ModalTypeEnum.CARD;
+  selectedItem!: ICryptoCurrency;
+  modalType = ModalTypeEnum;
+  listItemType = ListItemTypeEnum;
+
   constructor(
-    private cmcService: CmcService,
+    private cmcService: CmcService
   ) { }
 
   ngOnInit(): void {
       this.data$ = this.cmcService.getCoins().pipe(map((res) => res.data));
   }
 
-  onSelectListItem(item: ICryptoCurrency): void {
+  openModalOnSelectItem(item: ICryptoCurrency, modalType:  ModalType): void {
     console.log('selected item', item);
+    this.selectedItem = item;
+    this.isModalOpen = true;
+    this.openedModalType = modalType;
   }
 
 }

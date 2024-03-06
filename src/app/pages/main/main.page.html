@@ -1,16 +1,24 @@
 <app-toolbar></app-toolbar>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  
+
   <ion-list mode="ios" [inset]="true">
     @for (item of data$ | async; track item.name) {
       <app-list-item
+        [selectedItemType]="listItemType.WALLET"
         [item]="item"
-        itemType="walletItem"
-        (selectItem)="onSelectListItem($event)"
-        >
+        (selectItem)="openModalOnSelectItem($event, modalType.CARD)"
+      >
       </app-list-item>
     }
   </ion-list>
-  
+
+  <app-modal
+    [selectedModalType]="openedModalType"
+    [isOpen]="isModalOpen"
+    [data]="selectedItem"
+    (openModal)="isModalOpen = $event"
+  >
+  </app-modal>
+
 </ion-content>

@@ -1,7 +1,7 @@
 import { CommonModule, CurrencyPipe, DecimalPipe, PercentPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { ICryptoCurrency } from 'src/app/models';
+import { ICryptoCurrency, ListItemType, ListItemTypeEnum } from 'src/app/models';
 
 @Component({
   selector: 'app-list-item',
@@ -15,9 +15,11 @@ import { ICryptoCurrency } from 'src/app/models';
 })
 export class ListItemComponent  implements OnInit {
   @Input() item!: ICryptoCurrency;
-  @Input() itemType: 'walletItem' | 'tradeItem' = 'walletItem';
+  @Input() selectedItemType: ListItemType = ListItemTypeEnum.WALLET;
 
   @Output() selectItem = new EventEmitter<ICryptoCurrency>();
+
+  listItemType = ListItemTypeEnum;
 
   constructor() { }
 

@@ -20,6 +20,8 @@ export interface ICryptoCurrency {
     USD: ICryptoQuote
   },
   amount?: number;
+  isfavorite?: boolean;
+  isObserved?: boolean;
 }
 
 export interface ICryptoQuote {

@@ -28,7 +28,7 @@
 ion-app {
 
   &.ios {
-    // margin-top: 58px;
+    margin-top: 58px;
 
     ion-content {
       overflow-y: scroll;
@@ -58,7 +58,7 @@ ion-searchbar .searchbar-input-container input {
 }
 
 .list-ios {
-  border-radius: 25px;
+  border-radius: 24px;
   &.list-inset {
     margin: 0;
   }

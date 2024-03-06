@@ -1,3 +1,55 @@
-<p>
-  modal works!
-</p>
+<ion-modal
+  #modal
+  [class]="selectedModalType"
+  [isOpen]="isOpen"
+  [enterAnimation]="selectedModalType === modalType.FULL_SCREEN ? enterAnimation: null"
+  [leaveAnimation]="selectedModalType === modalType.FULL_SCREEN ? leaveAnimation : null"
+  (ionModalDidDismiss)="openModal.emit(false)"
+  >
+  <ng-template>
+    
+    <ion-header>
+      <ion-toolbar mode="ios" color="primary">
+      
+        <ion-buttons slot="start">
+          <ion-button mode="ios" shape="round" (click)="modal.dismiss()">
+            @switch (selectedModalType) {
+              @case (modalType.FULL_SCREEN) {
+                <ion-icon name="arrow-back-outline"></ion-icon>
+              }
+              @default {
+                <ion-icon name="close-outline"></ion-icon>
+              }
+            }
+          </ion-button>
+        </ion-buttons>
+
+        <ion-buttons slot="end">
+          <ion-button mode="ios" shape="round">
+            @if(data.isfavorite) {
+              <ion-icon name="star"></ion-icon>
+            } 
+            @else {
+              <ion-icon name="star-outline"></ion-icon>
+            }
+          </ion-button>
+  
+          <ion-button mode="ios" shape="round">
+            @if(data.isObserved) {
+              <ion-icon name="notifications"></ion-icon>
+            } 
+            @else {
+              <ion-icon name="notifications-outline"></ion-icon>
+            }
+          </ion-button>
+        </ion-buttons>
+
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-title>{{data.name}}</ion-title>
+    </ion-content>
+
+  </ng-template>
+</ion-modal>
