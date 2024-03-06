@@ -1,6 +1,7 @@
 import { CommonModule, CurrencyPipe, DecimalPipe, PercentPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+
 import { ICryptoCurrency, ListItemType, ListItemTypeEnum } from 'src/app/models';
 
 @Component({

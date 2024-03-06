@@ -2,8 +2,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } f
 import { IonicModule } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
-import { CmcService } from 'src/app/services/cmc-service/cmc.service';
-import { WsService } from 'src/app/services/ws-service/ws.service';
+import { CmcService, WsService  } from 'src/app/services';
 import { ChartComponent, SegmentsTabsComponent, ToolbarComponent } from 'src/app/components';
 
 @Component({
