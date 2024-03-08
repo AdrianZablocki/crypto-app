@@ -5,6 +5,7 @@ import { addIcons } from 'ionicons';
 import { arrowBackOutline, closeOutline, notifications, notificationsOutline, star, starOutline } from 'ionicons/icons';
 
 import { ICryptoCurrency, ModalType, ModalTypeEnum } from 'src/app/models';
+import { ChartComponent } from '../chart/chart.component';
 
 @Component({
   selector: 'app-modal',
@@ -20,7 +21,8 @@ import { ICryptoCurrency, ModalType, ModalTypeEnum } from 'src/app/models';
     IonModal,
     IonToolbar,
     IonHeader,
-    IonContent
+    IonContent,
+    ChartComponent
   ]
 })
 export class ModalComponent {
