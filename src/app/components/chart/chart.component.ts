@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ChartConfiguration, ChartOptions, ChartType } from "chart.js";
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 
 import { ICryptoCurrency } from 'src/app/models';
+import { ChartService } from 'src/app/services';
+import { ChartHelper } from './chart.helper';
 
 @Component({
   selector: 'app-chart',
@@ -13,38 +14,23 @@ import { ICryptoCurrency } from 'src/app/models';
     BaseChartDirective
   ]
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements AfterViewInit {
   @Input() data!: ICryptoCurrency; // TODO add model
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-
-  public lineChartData: ChartConfiguration<'line'>['data'] = {
-    labels: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July'
-    ],
-    datasets: [
-      {
-        data: [ 65, 59, 80, 81, 56, 55, 40 ],
-        label: 'Series A',
-        fill: true,
-        tension: 0.5,
-        borderColor: 'black',
-        backgroundColor: 'rgba(255,0,0,0.3)'
-      }
-    ]
-  };
-  public lineChartOptions: ChartOptions<'line'> = {
-    responsive: false
-  };
+  public lineChartData = ChartHelper.configuration;
+  public lineChartOptions = ChartHelper.options;
   public lineChartLegend = true;
+  public plugins = ChartHelper.plugins;
 
+  constructor(private chartService: ChartService) {}
 
-  ngOnInit(): void {
-    console.log(this.data);
+  ngAfterViewInit(): void {
+    this.chartService.getChartData().subscribe(res=> {
+      this.lineChartData.labels = res.labels;
+      this.lineChartData.datasets[0].data = res.data;
+      this.chart?.chart?.update()
+    });
   }
+
 }
