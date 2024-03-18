@@ -22,6 +22,8 @@ log.txt
 /www
 /platforms
 /plugins
+/ios
+/android
 
 # Compiled output
 /dist
@@ -67,7 +69,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# env var
+# env variables
 env.ts
 
 # nx

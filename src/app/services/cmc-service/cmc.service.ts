@@ -21,7 +21,7 @@ export class CmcService {
       .set('limit', '50')
       .set('convert', 'USD');
 
-    return this.http.get('http://localhost:5000/v1/cryptocurrency/listings/latest', {headers, params});
+    return this.http.get('http://localhost:5000/v1/cryptocurrency/listings/latest', { headers, params });
   }
 
 }

@@ -22,3 +22,8 @@ export interface IChartData {
   labels: string[];
   data: number[];
 }
+
+export interface IChartRangeButton {
+  value: string;
+  label: string;
+}

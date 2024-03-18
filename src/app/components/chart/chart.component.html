@@ -1,1 +1,15 @@
-<canvas id="chart" baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'" [plugins]="plugins" #chart></canvas>
+<div>{{ price | currency : 'USD' : 'symbol' }} {{ timestamp | date }}</div>
+
+<div class="chart-container">
+  <canvas id="chart" baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'" [plugins]="plugins" #chart></canvas>
+</div>
+
+@if (buttonsConfig) {
+  <ion-segment value="day">
+    @for (button of buttonsConfig; track $index) {
+      <ion-segment-button [value]="button.value" (click)="getChartData(button.value)">
+        <ion-label>{{ button.label }}</ion-label>
+      </ion-segment-button>
+    }  
+  </ion-segment>
+}

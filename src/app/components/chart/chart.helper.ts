@@ -1,4 +1,5 @@
 import { ChartConfiguration, ChartOptions } from "chart.js";
+import { IChartRangeButton } from 'src/app/models';
 
 export class ChartHelper {
 
@@ -7,25 +8,24 @@ export class ChartHelper {
       {
         id: 'chart',
         beforeEvent(chart: any, args: any, pluginOptions: any) {
-            const { type, x, y } = args.event;
-            const ctx = chart.ctx;
-            const { height, left, right, bottom } = chart.chartArea;
-  
-            console.log(chart, args, chart.tooltip._active)
-            // Set line opts
-            ctx.save();
-  
-            ctx.lineWidth = 1;
-            ctx.setLineDash([3, 3]);
-            ctx.strokeStyle = '#FF4949';
-  
-            // draw vertical line      
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, height);
-            ctx.stroke();
-  
-            ctx.restore();
+          const { height } = chart.chartArea;
+          const { x } = args.event;
+          const ctx = chart.ctx;
+
+          // Set line opts
+          ctx.save();
+
+          ctx.lineWidth = 1;
+          ctx.setLineDash([0, 0]);
+          ctx.strokeStyle = '#FFF';
+
+          // draw vertical line      
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, height);
+          ctx.stroke();
+
+          ctx.restore();
         }
   
       }
@@ -34,7 +34,8 @@ export class ChartHelper {
 
   static get options(): ChartOptions<'line'> {
     return {
-      responsive: false,
+      responsive: true,
+      maintainAspectRatio: true,
       scales: {
         x: {
           display: false,
@@ -54,29 +55,45 @@ export class ChartHelper {
         legend: {
           display: false
         },
-  
+        tooltip: {
+          enabled: false
+        },
       },
       interaction: {
         intersect: false
       },
+      elements: {
+        point: {
+          radius: 0,
+          borderWidth: 0,
+          hoverRadius: 0,
+        }
+      }
     };
   }
 
-  static get configuration(): ChartConfiguration<'line'>['data']  {
+  static getConfiguration(percentageChange?: number): ChartConfiguration<'line'>['data']  {
     return {
       labels: [],
       datasets: [
         {
           data: [],
-          label: 'Series A',
-          fill: true,
-          tension: 0.5,
-          borderColor: 'white',
-          backgroundColor: 'transparent',
+          borderColor: percentageChange && percentageChange < 0 ? '#EE4A59' : '#1AC097',
+          borderWidth: 1,
           pointRadius: 0
         }
       ]
     };
+  }
+
+  static get buttonsConfig(): IChartRangeButton[] {
+    return [
+      { label: 'Day', value: 'day'},
+      { label: 'Week', value: 'week'},
+      { label: 'Month', value: 'month'},
+      { label: 'Year', value: 'year'},
+      { label: 'All', value: 'all'}
+    ]
   }
 
 }

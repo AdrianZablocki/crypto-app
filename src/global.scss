@@ -63,3 +63,26 @@ ion-searchbar .searchbar-input-container input {
     margin: 0;
   }
 }
+
+ion-segment {
+  background: var(--ion-color-primary);
+  border-radius: 18px;
+}
+
+ion-segment-button {
+  &::part(native) {
+    color: var(--ion-color-tertiary);
+    background: var(--ion-color-primary);
+    border-radius: 16px;
+  }
+
+  &::part(indicator-background) {
+    background: var(--ion-color-primary);
+  }
+
+  &.segment-button-checked::part(native) {
+    color: var(--ion-color-light);
+    background: var(--ion-color-secondary);
+  }
+
+}

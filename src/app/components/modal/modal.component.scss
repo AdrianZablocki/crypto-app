@@ -3,6 +3,10 @@ ion-modal {
     background-color: var(--ion-color-primary);
   }
 
+  &::part(content) {
+    background-color: var(--ion-color-primary);
+  }
+
   &.cardModal {
     &::part(content) {
       margin-top: 168px;
