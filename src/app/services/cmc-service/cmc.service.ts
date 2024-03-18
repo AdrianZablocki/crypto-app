@@ -12,7 +12,7 @@ export class CmcService {
 
   constructor(private http: HttpClient) { }
 
-  getCoins(): Observable<any> {
+  getCoins(): Observable<ICMCResponse> {
     const headers = new HttpHeaders()
       .set('X-CMC_PRO_API_KEY', env.API_KEY)
       .set('Accept', 'application/json');
@@ -21,7 +21,11 @@ export class CmcService {
       .set('limit', '50')
       .set('convert', 'USD');
 
-    return this.http.get('http://localhost:5000/v1/cryptocurrency/listings/latest', { headers, params });
+    return this.http.get<ICMCResponse>('http://localhost:5000/v1/cryptocurrency/listings/latest', { headers, params });
+  }
+
+  getIconUrl(id: number): string {
+    return `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`;
   }
 
 }

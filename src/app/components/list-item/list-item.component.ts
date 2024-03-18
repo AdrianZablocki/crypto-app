@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { IonicModule } from '@ionic/angular';
 
 import { ICryptoCurrency, ListItemType, ListItemTypeEnum } from 'src/app/models';
+import { CmcService } from 'src/app/services';
 
 @Component({
   selector: 'app-list-item',
@@ -22,7 +23,7 @@ export class ListItemComponent  implements OnInit {
 
   listItemType = ListItemTypeEnum;
 
-  constructor() { }
+  constructor(private cmcService: CmcService) { }
 
   ngOnInit(): void {
     // TODO remove after tests
@@ -30,7 +31,7 @@ export class ListItemComponent  implements OnInit {
   }
 
   getIconUrl(id: number): string {
-    return `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`;
+    return this.cmcService.getIconUrl(id);
   }
 
   onSelectItem(item: ICryptoCurrency): void {
