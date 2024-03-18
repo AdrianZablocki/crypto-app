@@ -5,7 +5,7 @@
   <ion-list mode="ios" [inset]="true">
     @for (item of data$ | async; track item.name) {
       <app-list-item
-        [selectedItemType]="listItemType.WALLET"
+        [selectedItemType]="listItemType.TRADE"
         [item]="item"
         (selectItem)="openModalOnSelectItem($event, modalType.FULL_SCREEN)"
       >

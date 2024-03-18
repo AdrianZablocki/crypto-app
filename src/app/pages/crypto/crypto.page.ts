@@ -25,8 +25,8 @@ export class CryptoPage implements OnInit, OnDestroy, AfterViewInit {
   selectedTab = 'custom';
 
   segmentsConfig = [
-    { id: 'wallet', name: 'Portfel' },
-    { id: 'discovery', name: 'Odkryj' }
+    { id: 'wallet', name: 'Wallet' },
+    { id: 'discovery', name: 'Discovery' }
   ];
 
   constructor(

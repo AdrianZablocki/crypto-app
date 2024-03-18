@@ -44,9 +44,29 @@ ion-header {
     &:last-child {
       margin-right: 0;
     }
+  }
+}
 
-    &:first-child {
-      // margin-left: -16px;
+.coin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+
+  &-name {
+    font-size: 32px;
+    font-weight: 600;
+  }
+
+  &-icon {
+    img {
+      width: 50px;
+      height: 50px;
     }
+  }
+
+  &-short-name {
+    font-weight: 500;
+    margin-bottom: 20px;
   }
 }

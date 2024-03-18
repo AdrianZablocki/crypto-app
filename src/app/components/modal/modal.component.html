@@ -48,9 +48,24 @@
     </ion-header>
 
     <ion-content>
-      {{data.name}}
-      <app-chart [data]="data"></app-chart>
+      <div class="coin">
+        <div class="coin-name">{{ data.name }}</div>
+        <div class="coin-icon">
+          <img [alt]="data.name" [src]="getIconUrl(data.id)" />
+        </div>
+      </div>
+      <div class="coin-short-name">{{ data.symbol }}</div>
+
+      <div class="segments">
+        <app-segments-tabs [tabConfig]="segmentsConfig" [defaultTab]="segmentsConfig[0].id"></app-segments-tabs>
+      </div>
     </ion-content>
 
   </ng-template>
 </ion-modal>
+
+<ng-template #chart>
+  <app-chart [data]="data"></app-chart>
+</ng-template>
+
+<ng-template #test1><div>Wallet 1</div></ng-template>

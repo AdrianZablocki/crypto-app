@@ -1,7 +1,7 @@
 @if (tabConfig) {
-  <ion-segment [(ngModel)]="selectedTab">
+  <ion-segment [value]="selectedTab" (ionChange)="segmentChanged($event)">
     @for (tab of tabConfig; track $index) {
-      <ion-segment-button [value]="tab.name">
+      <ion-segment-button [value]="tab.id">
         <ion-label>{{tab.name}}</ion-label>
       </ion-segment-button>
     }
@@ -9,7 +9,7 @@
 
 
   @for (tab of tabConfig; track $index) {
-    @if (tab.tmpl && selectedTab === tab.name) {
+    @if (tab.tmpl && selectedTab === tab.id) {
       <ng-template [ngTemplateOutlet]="tab.tmpl"></ng-template>
     }
   }
