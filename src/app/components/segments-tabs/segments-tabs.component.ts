@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonLabel, IonSegment, IonSegmentButton } from "@ionic/angular/standalone";
 
@@ -13,16 +13,15 @@ import { IonLabel, IonSegment, IonSegmentButton } from "@ionic/angular/standalon
 })
 export class SegmentsTabsComponent implements OnInit {
   @Input() tabConfig!: { id: string; name: string; tmpl?: TemplateRef<any>}[];
-  @Input() defaultTab!: string;
-  
-  selectedTab!: string;
+
+  selectedTab = signal<string>('');
 
   ngOnInit(): void {
-    this.selectedTab = this.tabConfig[0].id;
+    this.selectedTab.set(this.tabConfig[0].id);
   }
 
   segmentChanged(event: CustomEvent | Event): void {
-    this.selectedTab = (event as CustomEvent).detail.value;
+    this.selectedTab.set((event as CustomEvent).detail.value);
   }
 
 }
