@@ -1,7 +1,15 @@
 <div>{{ price() | currency : 'USD' : 'symbol' }} {{ timestamp() | date : 'yyyy/MM/dd HH:mm:ss' }}</div>
 
 <div class="chart-container">
-  <canvas id="chart" baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'" [plugins]="plugins" #chart></canvas>
+  <canvas
+    baseChart
+    id="chart"
+    type="line"
+    [data]="lineChartData"
+    [options]="lineChartOptions"
+    [plugins]="plugins"
+    #chart>
+  </canvas>
 </div>
 
 @if (buttonsConfig) {

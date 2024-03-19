@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { Observable, map } from 'rxjs';
 
 import { ListItemComponent, ModalComponent, ToolbarComponent } from 'src/app/components';
 import { ICryptoCurrency, ListItemTypeEnum, ModalType, ModalTypeEnum } from 'src/app/models';
-import { CmcService } from 'src/app/services';
+import { WalletStore } from 'src/app/store/wallet/wallet.store';
 
 @Component({
   selector: 'app-main',
@@ -15,26 +14,32 @@ import { CmcService } from 'src/app/services';
   imports: [IonicModule, ToolbarComponent, CommonModule, ListItemComponent, ModalComponent]
 })
 export class MainPage implements OnInit {
-  data$!: Observable<any>;
   isModalOpen = false;
   openedModalType: ModalType = ModalTypeEnum.CARD;
   selectedItem!: ICryptoCurrency;
   modalType = ModalTypeEnum;
   listItemType = ListItemTypeEnum;
 
-  constructor(
-    private cmcService: CmcService
-  ) { }
+  store = inject(WalletStore)
+
+  test = computed(() => {
+    const selectedCoins = this.store.selectedCoin();
+    return {
+      coin:  selectedCoins.coins,
+      user: selectedCoins.userId
+    }
+  });
 
   ngOnInit(): void {
-      this.data$ = this.cmcService.getCoins().pipe(map((res) => res.data));
+    // this.store.load('');
+    console.log('init')
   }
 
   openModalOnSelectItem(item: ICryptoCurrency, modalType:  ModalType): void {
-    console.log('selected item', item);
     this.selectedItem = item;
     this.isModalOpen = true;
     this.openedModalType = modalType;
+    console.log(this.test())
   }
 
 }

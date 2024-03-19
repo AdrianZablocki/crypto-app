@@ -1,17 +1,21 @@
 <app-toolbar></app-toolbar>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-
-  <ion-list mode="ios" [inset]="true">
-    @for (item of data$ | async; track item.name) {
-      <app-list-item
-        [selectedItemType]="listItemType.TRADE"
-        [item]="item"
-        (selectItem)="openModalOnSelectItem($event, modalType.FULL_SCREEN)"
-      >
-      </app-list-item>
-    }
-  </ion-list>
+  @if(store.portfolio().length) {
+    <ion-list mode="ios" [inset]="true">
+      @for (item of store.portfolio(); track item.name) {
+        <app-list-item
+          [selectedItemType]="listItemType.TRADE"
+          [item]="item"
+          (selectItem)="openModalOnSelectItem($event, modalType.FULL_SCREEN)"
+        >
+        </app-list-item>
+      }
+    </ion-list>
+  } @else {
+    <div>loading</div>
+  } 
+  <!-- TODO add spinner -->
 
   <app-modal
     [selectedModalType]="openedModalType"
