@@ -7,7 +7,6 @@ import { IonLabel, IonSegment, IonSegmentButton } from "@ionic/angular/standalon
   selector: 'app-segments-tabs',
   templateUrl: './segments-tabs.component.html',
   styleUrls: ['./segments-tabs.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [FormsModule, IonLabel, IonSegment, IonSegmentButton, NgTemplateOutlet]
 })

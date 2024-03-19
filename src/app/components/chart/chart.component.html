@@ -5,7 +5,7 @@
 </div>
 
 @if (buttonsConfig) {
-  <ion-segment [value]="selectedRange()" (ionChange)="segmentChanged($event)">
+  <ion-segment [scrollable]="true" [value]="selectedRange()" (ionChange)="segmentChanged($event)">
     @for (button of buttonsConfig; track $index) {
       <ion-segment-button [value]="button.value" (click)="getChartData(button.value)">
         <ion-label>{{ button.label }}</ion-label>

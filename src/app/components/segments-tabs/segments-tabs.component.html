@@ -1,5 +1,5 @@
 @if (tabConfig) {
-  <ion-segment [value]="selectedTab()" (ionChange)="segmentChanged($event)">
+  <ion-segment [scrollable]="true" [value]="selectedTab()" (ionChange)="segmentChanged($event)">
     @for (tab of tabConfig; track $index) {
       <ion-segment-button [value]="tab.id">
         <ion-label>{{tab.name}}</ion-label>
