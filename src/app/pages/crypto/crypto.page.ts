@@ -35,7 +35,8 @@ export class CryptoPage implements OnInit, OnDestroy, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    this.data$ = this.cmcService.getCoins();
+    console.log('init crypto')
+    // this.data$ = this.cmcService.getCoins();
     // ,orderBookL2_25:SUIUSD //FTTUSDT
     // this.initializeSocketConnection('subscribe=orderBookL2_25:DOGE');
   }

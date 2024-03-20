@@ -1,7 +1,7 @@
 <app-toolbar></app-toolbar>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  @if(store.portfolio().length) {
+  @if(store.portfolio()?.length) {
     <ion-list mode="ios" [inset]="true">
       @for (item of store.portfolio(); track item.name) {
         <app-list-item

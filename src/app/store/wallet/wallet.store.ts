@@ -1,7 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop'
-import { pipe, switchMap } from 'rxjs';
+import { map, pipe, switchMap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 
 import { initialState } from './wallet.reducer';
@@ -14,15 +14,15 @@ export const WalletStore = signalStore(
   withMethods(state => {
     const cmcService = inject(CmcService);
     return {
-      load: rxMethod<string>( // TODO add dynamic parameters to cmc
-        pipe(
-          switchMap(() => cmcService.getCoins()),
-          tapResponse({
-            next: ((res: ICMCResponse) => patchState(state, { portfolio: res.data})),
-            error: console.error
-          })
-        )
-      )
+      load: rxMethod<string | null>(pipe( // TODO add dynamic parameters to cmc
+        switchMap(() => cmcService.getWallet()),
+        switchMap((res) => cmcService.getCoinsFromWallet(res.coinIds.join(','))),
+        map((res) => Object.keys(res.data).map(key => res.data[key])),
+        tapResponse({
+          next: ((res) => patchState(state, { portfolio: res })),
+          error: console.error
+        })
+      ))
     }
   }),
   withComputed(state => {
@@ -39,7 +39,7 @@ export const WalletStore = signalStore(
   }),
   withHooks({
     onInit(store): void {
-      store.load('')
+      store.load(null)
     }
   })
 )
