@@ -1,6 +1,13 @@
 <app-toolbar></app-toolbar>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <div class="segments">
+    <app-segments-tabs [tabConfig]="segmentsConfig"></app-segments-tabs>
+  </div>
+</ion-content>
+
+<!-- SEGMENTS -->
+<ng-template #walletTmpl>
   @if(store.portfolio()?.length) {
     <ion-list mode="ios" [inset]="true">
       @for (item of store.portfolio(); track item.name) {
@@ -24,5 +31,8 @@
     (openModal)="isModalOpen = $event"
   >
   </app-modal>
+</ng-template>
 
-</ion-content>
+<ng-template #discoveryTmpl>
+  <div>Discovery</div>
+</ng-template>

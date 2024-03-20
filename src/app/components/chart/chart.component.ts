@@ -61,10 +61,10 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
   private updatePriceOnHover(): void {
-    this.chart?.chartHover.subscribe(e => {
-      const index = e.active[0] as {index: number}
-      this.price.set(this.lineChartData.datasets[0].data[index.index] as number);
-      this.timestamp.set(this.lineChartData.labels?.[index.index] as string);
+    this.chart?.chartHover.subscribe((event: { active: { index: number }[] }) => {
+      const index = event.active[0].index || 0;
+      this.price.set(this.lineChartData.datasets[0].data[index] as number);
+      this.timestamp.set(this.lineChartData.labels?.[index] as string);
     });
   }
 

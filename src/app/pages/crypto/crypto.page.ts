@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { CmcService, WsService  } from 'src/app/services';
 import { ChartComponent, SegmentsTabsComponent, ToolbarComponent } from 'src/app/components';
+import { SegmentsTabsHelper } from 'src/app/components/segments-tabs/segments-tabs.helper';
 
 @Component({
   selector: 'app-crypto',
@@ -30,7 +31,7 @@ export class CryptoPage implements OnInit, OnDestroy, AfterViewInit {
   ];
 
   constructor(
-    private cmcService: CmcService,
+    // private cmcService: CmcService,
     private wsService: WsService
   ) { }
 
@@ -42,7 +43,12 @@ export class CryptoPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.mapTmpl();
+    this.segmentsConfig = SegmentsTabsHelper.mapTmpl(
+      this.segmentsConfig, {
+        wallet: this.walletTmpl,
+        discovery: this.discoveryTmpl
+      }
+    );
   }
 
   ngOnDestroy() {
@@ -55,15 +61,6 @@ export class CryptoPage implements OnInit, OnDestroy, AfterViewInit {
 
   private disconnectSocket() {
     this.wsService.disconnectSocket();
-  }
-
-  private mapTmpl(): void {
-    const map: {[key: string]: TemplateRef<any>} = {
-      wallet: this.walletTmpl,
-      discovery: this.discoveryTmpl
-    };
-
-    this.segmentsConfig = this.segmentsConfig.map(el => ({ ...el, tmpl: map[el.id] }));
   }
 
 }
