@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonLabel, IonSegment, IonSegmentButton } from "@ionic/angular/standalone";
 
@@ -15,6 +15,7 @@ import { Segment } from 'src/app/models';
 })
 export class SegmentsTabsComponent implements OnInit {
   @Input() tabConfig!: Segment[];
+  @Output() switchTo = new EventEmitter<string>();
 
   selectedTab = signal<string>('');
 
@@ -23,7 +24,9 @@ export class SegmentsTabsComponent implements OnInit {
   }
 
   segmentChanged(event: CustomEvent | Event): void {
-    this.selectedTab.set((event as CustomEvent).detail.value);
+    const segmenName = (event as CustomEvent).detail.value;
+    this.selectedTab.set(segmenName);
+    this.switchTo.emit(segmenName);
   }
 
 }

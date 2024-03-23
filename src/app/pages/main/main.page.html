@@ -2,17 +2,20 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="segments">
-    <app-segments-tabs [tabConfig]="segmentsConfig"></app-segments-tabs>
+    <app-segments-tabs
+      [tabConfig]="segmentsConfig"
+      (switchTo)="onSegmentChange($event)"
+    ></app-segments-tabs>
   </div>
 </ion-content>
 
 <!-- SEGMENTS -->
 <ng-template #walletTmpl>
-  @if(store.portfolio()?.length) {
+  @if(store.entities().length) {
     <ion-list mode="ios" [inset]="true">
-      @for (item of store.portfolio(); track item.name) {
+      @for (item of store.entities(); track item.name) {
         <app-list-item
-          [selectedItemType]="listItemType.TRADE"
+          [selectedItemType]="listItemType.WALLET"
           [item]="item"
           (selectItem)="openModalOnSelectItem($event, modalType.FULL_SCREEN)"
         >
@@ -20,19 +23,31 @@
       }
     </ion-list>
   } @else {
+    <!-- TODO add spinner -->
     <div>loading</div>
   } 
-  <!-- TODO add spinner -->
-
-  <app-modal
-    [selectedModalType]="openedModalType"
-    [isOpen]="isModalOpen"
-    [data]="selectedItem"
-    (openModal)="isModalOpen = $event"
-  >
-  </app-modal>
 </ng-template>
 
 <ng-template #discoveryTmpl>
-  <div>Discovery</div>
+  @if(store.crypto().length) {
+    <ion-list mode="ios" [inset]="true">
+      @for (item of store.crypto(); track item.name) {
+        <app-list-item
+          [selectedItemType]="listItemType.TRADE"
+          [item]="item"
+          (selectItem)="openModalOnSelectItem($event, modalType.CARD)"
+        >
+        </app-list-item>
+      }
+    </ion-list>
+  } @else {
+    <div>loading</div>
+  }
 </ng-template>
+
+<app-modal
+  [selectedModalType]="openedModalType"
+  [isOpen]="isModalOpen"
+  [data]="selectedItem"
+  (openModal)="isModalOpen = $event"
+></app-modal>

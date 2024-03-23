@@ -1,6 +1,6 @@
 import { ICryptoCurrency } from './crypto-currency.model';
 
-export interface ICMCResponse {
+export interface ICMCListResponse {
   data: ICryptoCurrency[];
   status: ICMCResponseStatus;
 }
@@ -13,4 +13,12 @@ export interface ICMCResponseStatus {
   credit_count: number;
   notice: string;
   total_count: number;
+}
+
+
+export interface ICMCWalletListResponse {
+  data: {
+    [key: string]: ICryptoCurrency;
+  };
+  status: ICMCResponseStatus;
 }

@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild, computed, inject } from '@angular/core';
+import { AfterViewInit, Component, TemplateRef, ViewChild, computed, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
 import { ListItemComponent, ModalComponent, SegmentsTabsComponent, ToolbarComponent } from 'src/app/components';
 import { SegmentsTabsHelper } from 'src/app/components/segments-tabs/segments-tabs.helper';
 import { ICryptoCurrency, ListItemTypeEnum, ModalType, ModalTypeEnum } from 'src/app/models';
-import { WalletStore } from 'src/app/store/wallet/wallet.store';
+import { WalletStore } from 'src/app/store/wallet.store';
 
 @Component({
   selector: 'app-main',
@@ -21,7 +21,7 @@ import { WalletStore } from 'src/app/store/wallet/wallet.store';
     SegmentsTabsComponent
   ]
 })
-export class MainPage implements OnInit, AfterViewInit {
+export class MainPage implements AfterViewInit {
   @ViewChild('walletTmpl') private walletTmpl!: TemplateRef<any>;
   @ViewChild('discoveryTmpl') private discoveryTmpl!: TemplateRef<any>;
   
@@ -46,10 +46,6 @@ export class MainPage implements OnInit, AfterViewInit {
     }
   });
 
-  ngOnInit(): void {
-    console.log('init Main Page')
-  }
-
   ngAfterViewInit(): void {
     this.segmentsConfig = SegmentsTabsHelper.mapTmpl(
       this.segmentsConfig, {
@@ -63,8 +59,19 @@ export class MainPage implements OnInit, AfterViewInit {
     this.selectedItem = item;
     this.isModalOpen = true;
     this.openedModalType = modalType;
+
+    console.log(item)
     // TODO remove after tests
-    console.log(this.test())
+    this.store.buyCurrency({ code: item.symbol, amount: 10.4567 });
+    this.store.saveToLocalStorage();
+    this.store.loadWallet(this.store.wallet());
+    // console.log(this.store.wallet());
+  }
+
+  onSegmentChange(segmentName: any): void {
+    if (segmentName === 'discovery') {
+      this.store.loadCryptoList(null);
+    }
   }
 
 }
