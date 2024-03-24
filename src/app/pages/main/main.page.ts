@@ -63,8 +63,8 @@ export class MainPage implements AfterViewInit {
     console.log(item)
     // TODO remove after tests
     this.store.buyCurrency({ code: item.symbol, amount: 10.4567 });
-    this.store.saveToLocalStorage();
-    this.store.loadWallet(this.store.wallet());
+    // this.store.saveToLocalStorage();
+    // this.store.loadWallet(this.store.wallet());
     // console.log(this.store.wallet());
   }
 

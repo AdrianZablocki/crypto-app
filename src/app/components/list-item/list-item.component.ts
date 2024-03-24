@@ -26,8 +26,7 @@ export class ListItemComponent  implements OnInit {
   constructor(private cmcService: CmcService) { }
 
   ngOnInit(): void {
-    // TODO remove after tests
-    this.item.amount = 4.3;
+    console.log(this.item)
   }
 
   getIconUrl(id: number): string {

@@ -3,7 +3,7 @@ import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStoreFeature, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Observable, map, pipe, switchMap, tap } from 'rxjs';
-import { ICMCListResponse, ICryptoCurrency } from '../models';
+import { ICMCListResponse, ICMCWalletListResponse, ICryptoCurrency } from '../models';
 
 export type WalletCoin = { code: string; amount: number };
 
@@ -39,17 +39,17 @@ export function withWalletEntities<Entity>(
               res.data.map(coin => coin.code).join(',')
             );
           }),
-          map((res) => Object.keys(res.data).map(key => res.data[key])),
+          map((res) => getAmount(res, state)),
           tapResponse({
-            next: ((res) => patchState(state, { entities: res })),
+            next: ((res) => patchState(state, { entities: res as Entity[] })),
             error: console.error
           })
         )),
         loadWallet: rxMethod<WalletCoin[]>(pipe(
           switchMap((res) => cmcService.getCoinsFromWallet(res.map(coin => coin.code).join(','))),
-          map((res) => Object.keys(res.data).map(key => res.data[key])),
+          map((res) => getAmount(res, state)),
           tapResponse({
-            next: ((res) => patchState(state, { entities: res })),
+            next: ((res) => patchState(state, { entities: res as Entity[] })),
             error: console.error
           })
         )),
@@ -66,9 +66,7 @@ export function withWalletEntities<Entity>(
           if (coins.find(coin => coin.code === buyedCoin.code)) {
             coins.forEach(coin => {
               if (coin.code === buyedCoin.code) {
-                // return {
-                  coin.amount = buyedCoin.amount + coin.amount
-                // }
+                coin.amount = buyedCoin.amount + coin.amount;
               }
               return coin;
             });
@@ -94,4 +92,11 @@ export function withWalletEntities<Entity>(
       }
     }),
   )
+}
+
+function getAmount<Entity>(response: { data: { [key: string]: Entity }}, state: any): any {
+  return Object.keys(response.data).map(key => ({ 
+    ...response.data[key], 
+    amount: state.wallet().find((c: WalletCoin) => c.code === key)?.amount 
+  }));
 }
