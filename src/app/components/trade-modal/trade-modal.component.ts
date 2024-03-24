@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, inject } from '@angular/core';
 import { ModalBaseDirective } from 'src/app/directives/modal-base.directive';
-import { IonHeader, IonModal, IonButtons, IonButton, IonToolbar, IonIcon, IonContent } from "@ionic/angular/standalone";
+import { IonHeader, IonModal, IonButtons, IonButton, IonToolbar, IonIcon, IonContent, IonInput, IonItem, IonLabel } from "@ionic/angular/standalone";
 import { ICryptoCurrency } from 'src/app/models';
 import { TradeType, TradeTypeEnum } from 'src/app/models/trade.type';
+import { WalletStore } from 'src/app/store/wallet.store';
 
 @Component({
   selector: 'app-trade-modal',
@@ -10,7 +11,18 @@ import { TradeType, TradeTypeEnum } from 'src/app/models/trade.type';
   styleUrls: ['./trade-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [IonContent, IonIcon, IonToolbar, IonButton, IonButtons, IonModal, IonHeader ]
+  imports: [
+    IonLabel,
+    IonItem,
+    IonContent,
+    IonIcon,
+    IonInput,
+    IonToolbar,
+    IonButton,
+    IonButtons,
+    IonModal,
+    IonHeader 
+  ]
 })
 export class TradeModalComponent extends ModalBaseDirective implements OnInit {
   @Input() data!: ICryptoCurrency;
@@ -18,12 +30,20 @@ export class TradeModalComponent extends ModalBaseDirective implements OnInit {
 
   tradeTypeEnum = TradeTypeEnum;
 
+  private store = inject(WalletStore);
+
   constructor() {
     super()
    }
 
   ngOnInit() {
     console.log('trade modal init', this.data)
+  }
+
+  onAction(code: string, amount: number): void {
+    this.store.buyCurrency({code, amount});
+    this.store.saveToLocalStorage();
+    this.store.loadWallet(this.store.wallet());
   }
 
 }

@@ -1,7 +1,16 @@
 import { Directive, EventEmitter, Input, Output, inject } from '@angular/core';
 import { AnimationController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, closeOutline, notifications, notificationsOutline, star, starOutline } from 'ionicons/icons';
+import {
+  arrowBackOutline,
+  arrowUpCircle,
+  closeOutline,
+  notifications,
+  notificationsOutline,
+  star,
+  starOutline,
+  cashOutline
+} from 'ionicons/icons';
 
 import { CmcService } from '../services';
 import { ModalType, ModalTypeEnum } from '../models';
@@ -13,21 +22,24 @@ export class ModalBaseDirective {
   @Input() isOpen = false;
   @Input() selectedModalType: ModalType = ModalTypeEnum.CARD;
   @Output() openModal = new EventEmitter<boolean>();
+
   modalType = ModalTypeEnum;
-  
-  animationCtrl = inject(AnimationController);
-  cmcService = inject(CmcService)
+
+  private animationCtrl = inject(AnimationController);
+  private cmcService = inject(CmcService);
 
   constructor() {
     addIcons({
       arrowBackOutline,
+      arrowUpCircle,
       closeOutline,
       notifications,
       notificationsOutline,
       star,
-      starOutline
-    })
-   }
+      starOutline,
+      cashOutline
+    });
+  }
 
   enterAnimation = (baseEl: HTMLElement) => {
     const root = baseEl.shadowRoot;

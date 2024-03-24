@@ -19,9 +19,53 @@
     </ion-header>
 
     <ion-content>
-      <div class="coin-name">
-        {{tradeType === tradeTypeEnum.SELL ? 'SELL' : 'BUY'}} {{data.name}}
+
+      <div class="header">
+        {{tradeType === tradeTypeEnum.SELL ? 'SELL' : 'BUY'}} {{data.symbol}}
       </div>
+      
+      <div class="item">
+        <div>
+          <div class="item-symbol">
+            <img [src]="getIconUrl(data.id)" [alt]="data.name">
+            <div>{{data.symbol}}</div>
+          </div>
+          <div class="item-balance">Balance: {{data.amount}}</div>
+        </div>
+        <ion-input
+          class="ion-text-right"
+          mode="ios"
+          type="number"
+          inputmode="decimal"
+          min="0"
+          placeholder="0,00"
+        ></ion-input>
+      </div>
+
+      <div class="item-separator">
+        <ion-icon name="arrow-up-circle" size="large" color="success"></ion-icon>
+      </div>
+
+      <div class="item">
+        <div>
+          <div class="item-symbol">
+            <ion-icon size="large" name="cash-outline"></ion-icon>
+            <div>USD</div>
+          </div>
+          <div class="item-balance">Balance: 1234,23 USD</div>
+        </div>
+        <ion-input
+          class="ion-text-right"
+          mode="ios"
+          type="number"
+          inputmode="decimal"
+          min="0"
+          placeholder="0,00"
+        ></ion-input>
+      </div>
+
+      <ion-button (click)="onAction(data.symbol, 2)">BUY</ion-button>
+
     </ion-content>
 
   </ng-template>
