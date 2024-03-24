@@ -56,6 +56,11 @@
       </div>
       <div class="coin-short-name">{{ data.symbol }}</div>
 
+      <div class="actions">
+        <ion-button shape="round" color="success" (click)="openTradeModal(tradeType.BUY)">Buy</ion-button>
+        <ion-button shape="round" color="danger" (click)="openTradeModal(tradeType.SELL)">Sell</ion-button>
+      </div>
+
       <div class="segments">
         <app-segments-tabs [tabConfig]="segmentsConfig"></app-segments-tabs>
       </div>
@@ -69,3 +74,11 @@
 </ng-template>
 
 <ng-template #test1><div>Wallet 1</div></ng-template>
+
+<app-trade-modal
+  [data]="data"
+  [isOpen]="isTradeModalOpen"
+  [selectedModalType]="modalType.FULL_SCREEN"
+  [tradeType]="selectedTradeType"
+  (openModal)="isTradeModalOpen = $event"
+></app-trade-modal>

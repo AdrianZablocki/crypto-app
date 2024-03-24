@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe, DecimalPipe, PercentPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
 import { ICryptoCurrency, ListItemType, ListItemTypeEnum } from 'src/app/models';
@@ -15,7 +15,7 @@ import { CmcService } from 'src/app/services';
     CommonModule, IonicModule, DecimalPipe, CurrencyPipe, PercentPipe
   ]
 })
-export class ListItemComponent  implements OnInit {
+export class ListItemComponent {
   @Input() item!: ICryptoCurrency;
   @Input() selectedItemType: ListItemType = ListItemTypeEnum.WALLET;
 
@@ -24,10 +24,6 @@ export class ListItemComponent  implements OnInit {
   listItemType = ListItemTypeEnum;
 
   constructor(private cmcService: CmcService) { }
-
-  ngOnInit(): void {
-    console.log(this.item)
-  }
 
   getIconUrl(id: number): string {
     return this.cmcService.getIconUrl(id);

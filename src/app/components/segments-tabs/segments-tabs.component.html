@@ -7,11 +7,9 @@
     }
   </ion-segment>
 
-
   @for (tab of tabConfig; track $index) {
     @if (tab.tmpl && selectedTab() === tab.id) {
       <ng-template [ngTemplateOutlet]="tab.tmpl"></ng-template>
     }
   }
-}
-
+} 

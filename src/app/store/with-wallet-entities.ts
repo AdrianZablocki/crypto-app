@@ -2,8 +2,8 @@ import { ProviderToken, computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStoreFeature, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { Observable, map, pipe, switchMap, tap } from 'rxjs';
-import { ICMCListResponse, ICMCWalletListResponse, ICryptoCurrency } from '../models';
+import { Observable, map, pipe, switchMap } from 'rxjs';
+import { ICMCListResponse, ICryptoCurrency } from '../models';
 
 export type WalletCoin = { code: string; amount: number };
 
@@ -55,7 +55,6 @@ export function withWalletEntities<Entity>(
         )),
         loadCryptoList: rxMethod<null>(pipe(
           switchMap(() => cmcService.getCoins()),
-          tap(res => console.log('GET crypto list', res)),
           tapResponse({
             next: ((res) => patchState(state, { crypto: res.data })),
             error: console.error
@@ -73,8 +72,6 @@ export function withWalletEntities<Entity>(
           } else {
             coins.push(buyedCoin);
           }
-
-          console.log('BUY', coins)
           patchState(state, { wallet: coins });
         }
       }
@@ -94,7 +91,7 @@ export function withWalletEntities<Entity>(
   )
 }
 
-function getAmount<Entity>(response: { data: { [key: string]: Entity }}, state: any): any {
+function getAmount<Entity>(response: { data: { [key: string]: Entity }}, state: any): Entity[] {
   return Object.keys(response.data).map(key => ({ 
     ...response.data[key], 
     amount: state.wallet().find((c: WalletCoin) => c.code === key)?.amount 

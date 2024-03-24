@@ -1,13 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
-import { AnimationController } from '@ionic/angular';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { IonContent, IonHeader, IonToolbar, IonModal, IonTitle, IonButtons, IonButton, IonIcon } from "@ionic/angular/standalone";
-import { addIcons } from 'ionicons';
-import { arrowBackOutline, closeOutline, notifications, notificationsOutline, star, starOutline } from 'ionicons/icons';
 
-import { ICryptoCurrency, ModalType, ModalTypeEnum } from 'src/app/models';
-import { CmcService } from 'src/app/services';
+import { ICryptoCurrency, TradeType, TradeTypeEnum } from 'src/app/models';
 import { ChartComponent } from '../chart/chart.component';
 import { SegmentsTabsComponent } from '../segments-tabs/segments-tabs.component';
+import { ModalBaseDirective } from 'src/app/directives/modal-base.directive';
+import { TradeModalComponent } from '../trade-modal/trade-modal.component';
 
 @Component({
   selector: 'app-modal',
@@ -25,72 +23,36 @@ import { SegmentsTabsComponent } from '../segments-tabs/segments-tabs.component'
     IonHeader,
     IonContent,
     ChartComponent,
-    SegmentsTabsComponent
+    SegmentsTabsComponent,
+    TradeModalComponent
   ]
 })
-export class ModalComponent implements AfterViewInit {
-  @Input() isOpen = false;
-  @Input() selectedModalType: ModalType = ModalTypeEnum.CARD;
+export class ModalComponent extends ModalBaseDirective implements AfterViewInit {
   @Input() data!: ICryptoCurrency;
-  @Output() openModal = new EventEmitter<boolean>();
-
   @ViewChild('chart') private chart!: TemplateRef<ChartComponent>;
   @ViewChild('test1') private test1!: TemplateRef<any>;
 
-  modalType = ModalTypeEnum;
+  selectedTradeType: TradeType = TradeTypeEnum.BUY;
+  tradeType = TradeTypeEnum;
+
   segmentsConfig = [
     { id: 'chart', name: 'Review' },
     { id: 'test1', name: 'News' }
   ];
 
-  constructor(
-    private animationCtrl: AnimationController,
-    private cmcService: CmcService
-  ) {
-    addIcons({
-      arrowBackOutline,
-      closeOutline,
-      notifications,
-      notificationsOutline,
-      star,
-      starOutline
-    })
+  isTradeModalOpen = false;
+
+  constructor() {
+    super();
   }
 
   ngAfterViewInit(): void {
       this.mapTmpl();
   }
 
-  enterAnimation = (baseEl: HTMLElement) => {
-    const root = baseEl.shadowRoot;
-
-    const backdropAnimation = this.animationCtrl
-      .create()
-      .addElement(root?.querySelector('ion-backdrop')!)
-      .fromTo('opacity', '0.01', 'var(--backdrop-opacity)');
-
-    const wrapperAnimation = this.animationCtrl
-      .create()
-      .addElement(root?.querySelector('.modal-wrapper')!)
-      .keyframes([
-        { offset: 0, opacity: '0', transform: 'translateX(100%)' },
-        { offset: 1, opacity: '1', transform: 'translateX(0)' },
-      ]);
-
-    return this.animationCtrl
-      .create()
-      .addElement(baseEl)
-      .easing('cubic-bezier(0.42, 0, 0.58, 1)')
-      .duration(500)
-      .addAnimation([backdropAnimation, wrapperAnimation]);
-  };
-
-  leaveAnimation = (baseEl: HTMLElement) => {
-    return this.enterAnimation(baseEl).direction('reverse');
-  };
-
-  getIconUrl(id: number): string {
-    return this.cmcService.getIconUrl(id);
+  openTradeModal(tradeType: TradeType): void {
+    this.isTradeModalOpen = true;
+    this.selectedTradeType = tradeType;
   }
 
   private mapTmpl(): void {

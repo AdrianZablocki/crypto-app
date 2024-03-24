@@ -60,9 +60,9 @@ export class MainPage implements AfterViewInit {
     this.isModalOpen = true;
     this.openedModalType = modalType;
 
-    console.log(item)
+    // console.log(item)
     // TODO remove after tests
-    this.store.buyCurrency({ code: item.symbol, amount: 10.4567 });
+    // this.store.buyCurrency({ code: item.symbol, amount: 10.4567 });
     // this.store.saveToLocalStorage();
     // this.store.loadWallet(this.store.wallet());
     // console.log(this.store.wallet());
