@@ -3,8 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { env } from 'env';
-import { ICMCListResponse, ICMCWalletListResponse } from 'src/app/models';
-import { WalletCoin } from 'src/app/store/with-wallet-entities';
+import { ICMCListResponse, ICMCWalletListResponse, IWallet } from 'src/app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -36,11 +35,11 @@ export class CmcService {
     return `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`;
   }
 
-  getWallet(): Observable<{data: WalletCoin[]}> {
+  getWallet(): Observable<IWallet> {
     const params = new HttpParams()
       .set('id', 1);
 
-    return this.http.get<{ data: WalletCoin[] }>(`http://localhost:5000/wallet`, { params });
+    return this.http.get<IWallet>(`http://localhost:5000/wallet`, { params });
   }
 
 }

@@ -3,20 +3,19 @@ import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStoreFeature, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Observable, map, pipe, switchMap } from 'rxjs';
-import { ICMCListResponse, ICryptoCurrency } from '../models';
-
-export type WalletCoin = { code: string; amount: number };
+import { ICMCListResponse, ICryptoCurrency, WalletCoin } from '../models';
 
 export interface WithWalletEntityState<Entity> {
   entities: Entity[];
   userId: string;
   wallet: WalletCoin[];
-  crypto: ICryptoCurrency[];
+  balance: number;
+  crypto: ICryptoCurrency[]; // TODO move to cryptocurrencies store
 }
 
 export function withWalletEntities<Entity>(
   Loader: ProviderToken<{
-    getWallet: () => Observable<{ data: WalletCoin[] }>;
+    getWallet: () => Observable<{ currencies: WalletCoin[], balance: number }>;
     getCoinsFromWallet: (coinIds: string) => Observable<{ data: { [key: string]: Entity } }>;
     getCoins: () => Observable<ICMCListResponse> 
   }>
@@ -26,17 +25,19 @@ export function withWalletEntities<Entity>(
       entities: [] as Entity[],
       userId: '',
       wallet: [] as WalletCoin[],
+      balance: 0,
       crypto: [] as ICryptoCurrency[]
     }),
     withMethods(state => {
       const cmcService = inject(Loader);
       return {
+
         load: rxMethod<null>(pipe( // TODO add dynamic parameters to cmc
           switchMap(() => cmcService.getWallet()),
           switchMap((res) => {
-            patchState(state, { wallet: res.data });
+            patchState(state, { wallet: res.currencies, balance: res.balance });
             return cmcService.getCoinsFromWallet(
-              res.data.map(coin => coin.code).join(',')
+              res.currencies.map(coin => coin.code).join(',')
             );
           }),
           map((res) => getAmount(res, state)),
@@ -45,6 +46,7 @@ export function withWalletEntities<Entity>(
             error: console.error
           })
         )),
+
         loadWallet: rxMethod<WalletCoin[]>(pipe(
           switchMap((res) => cmcService.getCoinsFromWallet(res.map(coin => coin.code).join(','))),
           map((res) => getAmount(res, state)),
@@ -53,6 +55,7 @@ export function withWalletEntities<Entity>(
             error: console.error
           })
         )),
+
         loadCryptoList: rxMethod<null>(pipe(
           switchMap(() => cmcService.getCoins()),
           tapResponse({
@@ -60,12 +63,13 @@ export function withWalletEntities<Entity>(
             error: console.error
           })
         )),
+
         buyCurrency(buyedCoin: WalletCoin): void {
           const coins = state.wallet();
           if (coins.find(coin => coin.code === buyedCoin.code)) {
             coins.forEach(coin => {
               if (coin.code === buyedCoin.code) {
-                coin.amount = buyedCoin.amount + coin.amount;
+                coin.amount = +buyedCoin.amount + +coin.amount;
               }
               return coin;
             });
@@ -73,6 +77,10 @@ export function withWalletEntities<Entity>(
             coins.push(buyedCoin);
           }
           patchState(state, { wallet: coins });
+        },
+
+        updateBalance(newBalance: number): void {
+          patchState(state, { balance: newBalance });
         }
       }
     }),

@@ -55,8 +55,8 @@
               <ion-icon size="large" name="cash-outline"></ion-icon>
               <div>USD</div>
             </div>
-            <div class="item-balance" (click)="spendAllBalance(ballance)">
-              Balance: {{ form.get('ballance')?.value }} USD
+            <div class="item-balance" (click)="spendAllBalance(store.balance())">
+              Balance: {{ store.balance() | currency : 'USD' : 'symbol'  }} USD
             </div>
           </div>
           <div>
@@ -68,7 +68,7 @@
               inputmode="decimal"
               min="0"
               placeholder="0,00"
-              [max]="ballance"
+
               (ionInput)="onBalanceInput($event)"
             ></ion-input>
 

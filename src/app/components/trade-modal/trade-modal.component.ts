@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonHeader, IonModal, IonButtons, IonButton, IonToolbar, IonIcon, IonContent, IonInput, IonItem, IonLabel } from "@ionic/angular/standalone";
@@ -14,6 +15,7 @@ import { WalletStore } from 'src/app/store/wallet.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     IonLabel,
     IonItem,
@@ -34,39 +36,36 @@ export class TradeModalComponent extends ModalBaseDirective implements OnInit {
   @Output() closeOnFinalizeTransaction = new EventEmitter();
 
   form!: FormGroup;
-  ballance = 12345.45; // TODO get blance from store, before create it
   tradeTypeEnum = TradeTypeEnum;
-
-  private store = inject(WalletStore);
+  store = inject(WalletStore);
 
   constructor(private formBuilder: FormBuilder) {
     super()
    }
 
   ngOnInit() {
-    console.log('trade modal init', this.data);
-
     this.form = this.formBuilder.group({
       currencyInput: [0],
-      balanceInput: [0, [Validators.max(this.ballance)]],
-      ballance: [this.ballance, []]
-    })
+      balanceInput: [0]
+    });
   }
 
   onAction(code: string): void {
     this.store.buyCurrency({ code, amount: this.form.get('currencyInput')?.value });
+    this.store.updateBalance(this.store.balance() - this.form.get('balanceInput')?.value);
     this.store.saveToLocalStorage();
     this.store.loadWallet(this.store.wallet());
 
     this.form.patchValue({
-      ballance: this.form.get('ballance')?.value - this.form.get('balanceInput')?.value,
       balanceInput: 0,
       currencyInput: 0
     });
+
     this.closeOnFinalizeTransaction.emit(false);
   }
 
   onCurrencyInput(event: CustomEvent | Event): void {
+    this.setBalanceLimit();
     this.form.patchValue({
       balanceInput: (event as CustomEvent).detail.value * this.data.quote.USD.price,
       currencyInput: (event as CustomEvent).detail.value
@@ -74,6 +73,7 @@ export class TradeModalComponent extends ModalBaseDirective implements OnInit {
   }
 
   onBalanceInput(event: CustomEvent | Event): void {
+    this.setBalanceLimit();
     this.form.patchValue({
       balanceInput: (event as CustomEvent).detail.value,
       currencyInput: (event as CustomEvent).detail.value / this.data.quote.USD.price
@@ -81,7 +81,7 @@ export class TradeModalComponent extends ModalBaseDirective implements OnInit {
   }
 
   spendAllBalance(balance: number): void {
-    // TODO substract the amount spent from walet balance, before create it
+    this.setBalanceLimit();
     this.form.patchValue({
       balanceInput: balance,
       currencyInput: balance / this.data.quote.USD.price
@@ -93,5 +93,9 @@ export class TradeModalComponent extends ModalBaseDirective implements OnInit {
       return true;
     }
     return this.form.get('balanceInput')?.value < 0 || this.form.get('currencyInput')?.value <= 0;
+  }
+
+  private setBalanceLimit(): void {
+    this.form.get('balanceInput')?.addValidators([Validators.max(this.store.balance())]);
   }
 }
