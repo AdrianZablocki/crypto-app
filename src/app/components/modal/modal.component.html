@@ -58,7 +58,9 @@
 
       <div class="actions">
         <ion-button shape="round" color="success" (click)="openTradeModal(tradeType.BUY)">Buy</ion-button>
-        <ion-button shape="round" color="danger" (click)="openTradeModal(tradeType.SELL)">Sell</ion-button>
+        @if(isCurrencyInWallet(data.symbol)) {
+          <ion-button shape="round" color="danger" (click)="openTradeModal(tradeType.SELL)">Sell</ion-button>
+        }
       </div>
 
       <div class="segments">
@@ -80,5 +82,6 @@
   [isOpen]="isTradeModalOpen"
   [selectedModalType]="modalType.FULL_SCREEN"
   [tradeType]="selectedTradeType"
-  (openModal)="isTradeModalOpen = $event"
+  (openModal)="isTradeModalOpen = $event;"
+  (closeOnFinalizeTransaction)="isOpen = false; isTradeModalOpen = false"
 ></app-trade-modal>

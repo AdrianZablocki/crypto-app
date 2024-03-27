@@ -21,50 +21,74 @@
     <ion-content>
 
       <div class="header">
-        {{tradeType === tradeTypeEnum.SELL ? 'SELL' : 'BUY'}} {{data.symbol}}
+        {{tradeType === tradeTypeEnum.SELL ? 'Sell' : 'Buy'}} {{data.symbol}}
       </div>
-      
-      <div class="item">
-        <div>
-          <div class="item-symbol">
-            <img [src]="getIconUrl(data.id)" [alt]="data.name">
-            <div>{{data.symbol}}</div>
+
+      <form [formGroup]="form" class="form">
+        <div class="item">
+          <div>
+            <div class="item-symbol">
+              <img [src]="getIconUrl(data.id)" [alt]="data.name">
+              <div>{{data.symbol}}</div>
+            </div>
+            <div class="item-balance">Balance: {{data.amount}}</div>
           </div>
-          <div class="item-balance">Balance: {{data.amount}}</div>
+          <ion-input
+          formControlName="currencyInput"
+            class="ion-text-right"
+            mode="ios"
+            type="number"
+            inputmode="decimal"
+            min="0"
+            placeholder="0,00"
+            (ionInput)="onCurrencyInput($event)"
+          ></ion-input>
         </div>
-        <ion-input
-          class="ion-text-right"
-          mode="ios"
-          type="number"
-          inputmode="decimal"
-          min="0"
-          placeholder="0,00"
-        ></ion-input>
-      </div>
-
-      <div class="item-separator">
-        <ion-icon name="arrow-up-circle" size="large" color="success"></ion-icon>
-      </div>
-
-      <div class="item">
-        <div>
-          <div class="item-symbol">
-            <ion-icon size="large" name="cash-outline"></ion-icon>
-            <div>USD</div>
+  
+        <div class="item-separator">
+          <ion-icon name="arrow-up-circle" size="large" color="success"></ion-icon>
+        </div>
+  
+        <div class="item" [class.error]="form.get('balanceInput')?.errors">
+          <div>
+            <div class="item-symbol">
+              <ion-icon size="large" name="cash-outline"></ion-icon>
+              <div>USD</div>
+            </div>
+            <div class="item-balance" (click)="spendAllBalance(ballance)">
+              Balance: {{ form.get('ballance')?.value }} USD
+            </div>
           </div>
-          <div class="item-balance">Balance: 1234,23 USD</div>
-        </div>
-        <ion-input
-          class="ion-text-right"
-          mode="ios"
-          type="number"
-          inputmode="decimal"
-          min="0"
-          placeholder="0,00"
-        ></ion-input>
-      </div>
+          <div>
+            <ion-input
+              formControlName="balanceInput"
+              class="ion-text-right full"
+              mode="ios"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              placeholder="0,00"
+              [max]="ballance"
+              (ionInput)="onBalanceInput($event)"
+            ></ion-input>
 
-      <ion-button (click)="onAction(data.symbol, 2)">BUY</ion-button>
+            @if(form.get('balanceInput')?.errors) {
+              <div class="item-error">Your balance is to low</div>
+            }
+            
+          </div>
+          
+        </div>
+      </form>
+
+      <ion-button
+        expand="block"
+        shape="round"
+        [disabled]="isTradeButtonDisabled()"
+        (click)="onAction(data.symbol)"
+      >
+        {{tradeType === tradeTypeEnum.SELL ? 'Sell' : 'Buy'}}
+      </ion-button>
 
     </ion-content>
 

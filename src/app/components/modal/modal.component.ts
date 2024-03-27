@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, TemplateRef, ViewChild, inject } from '@angular/core';
 import { IonContent, IonHeader, IonToolbar, IonModal, IonTitle, IonButtons, IonButton, IonIcon } from "@ionic/angular/standalone";
 
 import { ICryptoCurrency, TradeType, TradeTypeEnum } from 'src/app/models';
@@ -6,6 +6,7 @@ import { ChartComponent } from '../chart/chart.component';
 import { SegmentsTabsComponent } from '../segments-tabs/segments-tabs.component';
 import { ModalBaseDirective } from 'src/app/directives/modal-base.directive';
 import { TradeModalComponent } from '../trade-modal/trade-modal.component';
+import { WalletStore } from 'src/app/store/wallet.store';
 
 @Component({
   selector: 'app-modal',
@@ -34,6 +35,7 @@ export class ModalComponent extends ModalBaseDirective implements AfterViewInit 
 
   selectedTradeType: TradeType = TradeTypeEnum.BUY;
   tradeType = TradeTypeEnum;
+  store = inject(WalletStore);
 
   segmentsConfig = [
     { id: 'chart', name: 'Review' },
@@ -53,6 +55,10 @@ export class ModalComponent extends ModalBaseDirective implements AfterViewInit 
   openTradeModal(tradeType: TradeType): void {
     this.isTradeModalOpen = true;
     this.selectedTradeType = tradeType;
+  }
+
+  isCurrencyInWallet(code: string): any {
+    return this.store.wallet().find(currency => currency.code === code);
   }
 
   private mapTmpl(): void {

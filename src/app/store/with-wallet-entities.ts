@@ -16,8 +16,8 @@ export interface WithWalletEntityState<Entity> {
 
 export function withWalletEntities<Entity>(
   Loader: ProviderToken<{
-    getWallet: () => Observable<{data: WalletCoin[]}>;
-    getCoinsFromWallet: (coinIds: string) => Observable<{ data: { [key: string]: Entity }}>;
+    getWallet: () => Observable<{ data: WalletCoin[] }>;
+    getCoinsFromWallet: (coinIds: string) => Observable<{ data: { [key: string]: Entity } }>;
     getCoins: () => Observable<ICMCListResponse> 
   }>
 ) {
