@@ -8,7 +8,10 @@
           <div class="name">{{ item.name }}</div>
           @switch (selectedItemType) {
             @case (listItemType.WALLET) {
-              <div class="amount">{{ item.amount }}{{ item.symbol }} {{ item.quote.USD.price | currency : 'USD' : 'symbol' }}</div>
+              <div class="amount">
+                {{ item.amount?.toFixed(6) }}{{ item.symbol }} 
+                {{ item.quote.USD.price | currency : 'USD' : 'symbol' }}
+              </div>
             }
             @case (listItemType.TRADE) {
               <div class="symbol">{{ item.symbol }} to USD</div>
