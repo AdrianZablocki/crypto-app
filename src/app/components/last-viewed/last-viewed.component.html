@@ -1,0 +1,22 @@
+<ion-title class="title">Last viewed</ion-title>
+
+<ion-card mode="ios" color="primary" class="card">
+  <ion-card-content class="card-content">
+    @for (item of data; track item) {
+      <div>
+        <img [src]="getIconUrl(item.id)" [alt]="item.name" class="image">
+        <div>{{ item.symbol }}</div>
+        <div
+          class="change"
+          [class.positive]="item.quote.USD.percent_change_24h > 0"
+          [class.negative]="item.quote.USD.percent_change_24h < 0"
+        >
+          {{ item.quote.USD.percent_change_24h | number : '1.2-2' }}%
+        </div>
+      </div>
+    } @empty {
+      Empty list of coins
+    }
+
+  </ion-card-content>
+</ion-card>

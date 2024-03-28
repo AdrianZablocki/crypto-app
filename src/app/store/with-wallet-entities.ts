@@ -11,6 +11,8 @@ export interface WithWalletEntityState<Entity> {
   wallet: WalletCoin[];
   balance: number;
   crypto: ICryptoCurrency[]; // TODO move to cryptocurrencies store
+  lastViewed: string[];
+  test: ICryptoCurrency[];
 }
 
 export function withWalletEntities<Entity>(
@@ -26,7 +28,9 @@ export function withWalletEntities<Entity>(
       userId: '',
       wallet: [] as WalletCoin[],
       balance: 0,
-      crypto: [] as ICryptoCurrency[]
+      crypto: [] as ICryptoCurrency[],
+      lastViewed: [] as string[],
+      test: []  as ICryptoCurrency[]
     }),
     withMethods(state => {
       const cmcService = inject(Loader);
@@ -36,7 +40,7 @@ export function withWalletEntities<Entity>(
         load: rxMethod<null>(pipe( // TODO add dynamic parameters to cmc
           switchMap(() => cmcService.getWallet()),
           switchMap((res) => {
-            patchState(state, { wallet: res.currencies, balance: res.balance });
+            patchState(state, { wallet: res.currencies, balance: res.balance, lastViewed: res.currencies.map(c => c.code) });
             return cmcService.getCoinsFromWallet(
               res.currencies.map(coin => coin.code).join(',')
             );
@@ -49,7 +53,10 @@ export function withWalletEntities<Entity>(
         )),
 
         loadWallet: rxMethod<WalletCoin[]>(pipe(
-          switchMap((res) => cmcService.getCoinsFromWallet(res.map(coin => coin.code).join(','))),
+          switchMap((res) => {
+            patchState(state, { lastViewed: res.map(coin => coin.code) });
+            return cmcService.getCoinsFromWallet(res.map(coin => coin.code).join(','));
+          }),
           map((res) => getAmount(res, state)),
           tapResponse({
             next: ((res) => patchState(state, { entities: res as Entity[] })),
@@ -78,14 +85,49 @@ export function withWalletEntities<Entity>(
 
         updateBalance(newBalance: number): void {
           patchState(state, { balance: newBalance });
-        }
+        },
+
+        updateLastViewed(code: string): void {
+          const coins = state.lastViewed();
+          // const isInCollection = coins.find(c => c === code);
+          
+          console.log(coins);
+          // if (isInCollection) {
+          //   return;
+          // }
+
+          coins.push(code);
+          const uniqueValues = [...new Set(coins)]
+          console.log(coins, uniqueValues);
+          // if (coins.length > 20) {
+          //   coins.shift();
+          // }
+          patchState(state, { lastViewed: uniqueValues });
+        },
+
+        loadLastViewed: rxMethod<string>(pipe(
+          switchMap((res) => {
+            // patchState(state, { lastViewed: res.map(coin => coin.code) });
+            return cmcService.getCoinsFromWallet(res);
+          }),
+          map((res) => {
+            console.log('LOAD LAST VIEWEED', state.lastViewed());
+
+            // return Object.keys(res.data).map(key => res.data[key])
+            return state.lastViewed().map(key => res.data[key])
+            return res;
+          }),
+          tapResponse({
+            next: ((res) => patchState(state, { test: res as ICryptoCurrency[] })),
+            error: console.error
+          })
+        )),
       }
     }),
     withComputed(state => {
       return {
         selectedCoin: computed(() => {
           const coinId = 1;
-
           return {
             coins: state.entities().length ? state.entities().filter((coin: any) => coin.id === coinId) : [],
             userId: state.userId()
