@@ -30,6 +30,7 @@ export function withWalletEntities<Entity>(
     }),
     withMethods(state => {
       const cmcService = inject(Loader);
+
       return {
 
         load: rxMethod<null>(pipe( // TODO add dynamic parameters to cmc
@@ -64,18 +65,14 @@ export function withWalletEntities<Entity>(
           })
         )),
 
-        buyCurrency(buyedCoin: WalletCoin): void {
+        tradeOnCrypto(coin: WalletCoin, side: 'buy' | 'sell'): void {
           const coins = state.wallet();
-          if (coins.find(coin => coin.code === buyedCoin.code)) {
-            coins.forEach(coin => {
-              if (coin.code === buyedCoin.code) {
-                coin.amount = +buyedCoin.amount + +coin.amount;
-              }
-              return coin;
-            });
-          } else {
-            coins.push(buyedCoin);
-          }
+          const coinToUpdate = coins.find(c => c.code === coin.code);
+
+          coinToUpdate
+            ? (coinToUpdate.amount = side === 'buy' ? +coin.amount + +coinToUpdate.amount : +coinToUpdate.amount - +coin.amount)
+            : coins.push(coin);
+
           patchState(state, { wallet: coins });
         },
 

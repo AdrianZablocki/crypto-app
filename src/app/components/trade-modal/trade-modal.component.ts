@@ -51,8 +51,12 @@ export class TradeModalComponent extends ModalBaseDirective implements OnInit {
   }
 
   onAction(code: string): void {
-    this.store.buyCurrency({ code, amount: this.form.get('currencyInput')?.value });
-    this.store.updateBalance(this.store.balance() - this.form.get('balanceInput')?.value);
+    this.store.tradeOnCrypto({ code, amount: this.form.get('currencyInput')?.value }, this.tradeType);
+    this.store.updateBalance(
+      this.tradeType === this.tradeTypeEnum.BUY
+        ? this.store.balance() - this.form.get('balanceInput')?.value
+        : this.store.balance() + this.form.get('balanceInput')?.value
+    );
     this.store.saveToLocalStorage();
     this.store.loadWallet(this.store.wallet());
 
@@ -96,6 +100,9 @@ export class TradeModalComponent extends ModalBaseDirective implements OnInit {
   }
 
   private setBalanceLimit(): void {
+    if (this.tradeType === this.tradeTypeEnum.SELL) {
+      return;
+    }
     this.form.get('balanceInput')?.addValidators([Validators.max(this.store.balance())]);
   }
 }

@@ -29,6 +29,13 @@
 </ng-template>
 
 <ng-template #discoveryTmpl>
+  <div>Ostatnio wyświetlane</div>
+  <div>Staking</div>
+  <div>Edukacja</div>
+  <div>Największe zmiany (Największy zysk/Największa strata)</div>
+  <div>Największy obrót</div>
+  <div>Kolekcje</div>
+  <div>Wszystkie kryptowaluty (10 na karcie  + wyświetl wszystko)</div>
   @if(store.crypto().length) {
     <ion-list mode="ios" [inset]="true">
       @for (item of store.crypto(); track item.name) {
