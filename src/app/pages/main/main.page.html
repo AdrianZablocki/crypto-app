@@ -29,7 +29,7 @@
 </ng-template>
 
 <ng-template #discoveryTmpl>
-  <app-last-viewed [data]="store.test()"></app-last-viewed>
+  <app-last-viewed [data]="store.loadedLastViewed()"></app-last-viewed>
 
   <!-- <div>Staking</div>
   <div>Edukacja</div>
@@ -38,9 +38,9 @@
   <div>Kolekcje</div>
   <div>Wszystkie kryptowaluty (10 na karcie  + wyświetl wszystko)</div> -->
 
-  @if(store.crypto().length) {
+  @if(store.allCryptocurrencies().length) {
     <ion-list mode="ios" [inset]="true">
-      @for (item of store.crypto(); track item.name) {
+      @for (item of store.allCryptocurrencies(); track item.name) {
         <app-list-item
           [selectedItemType]="listItemType.TRADE"
           [item]="item"

@@ -10,9 +10,9 @@ export interface WithWalletEntityState<Entity> {
   userId: string;
   wallet: WalletCoin[];
   balance: number;
-  crypto: ICryptoCurrency[]; // TODO move to cryptocurrencies store
+  allCryptocurrencies: ICryptoCurrency[]; // TODO move to cryptocurrencies store
   lastViewed: string[];
-  test: ICryptoCurrency[];
+  loadedLastViewed: ICryptoCurrency[];
 }
 
 export function withWalletEntities<Entity>(
@@ -28,9 +28,9 @@ export function withWalletEntities<Entity>(
       userId: '',
       wallet: [] as WalletCoin[],
       balance: 0,
-      crypto: [] as ICryptoCurrency[],
+      allCryptocurrencies: [] as ICryptoCurrency[],
       lastViewed: [] as string[],
-      test: []  as ICryptoCurrency[]
+      loadedLastViewed: []  as ICryptoCurrency[]
     }),
     withMethods(state => {
       const cmcService = inject(Loader);
@@ -67,7 +67,7 @@ export function withWalletEntities<Entity>(
         loadCryptoList: rxMethod<null>(pipe(
           switchMap(() => cmcService.getCoins()),
           tapResponse({
-            next: ((res) => patchState(state, { crypto: res.data })),
+            next: ((res) => patchState(state, { allCryptocurrencies: res.data })),
             error: console.error
           })
         )),
@@ -98,7 +98,7 @@ export function withWalletEntities<Entity>(
           switchMap((res) => cmcService.getCoinsBySymbol(res)),
           map((res) => state.lastViewed().map(key => res.data[key])),
           tapResponse({
-            next: ((res) => patchState(state, { test: res as ICryptoCurrency[] })),
+            next: ((res) => patchState(state, { loadedLastViewed: res as ICryptoCurrency[] })),
             error: console.error
           })
         )),
