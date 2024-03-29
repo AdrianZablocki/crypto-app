@@ -20,7 +20,6 @@ export const WalletStore = signalStore(
 
         if (lastViewed) {
           patchState(store,  { lastViewed });
-          store.loadLastViewed(lastViewed.join(','));
         }
         return;
       }

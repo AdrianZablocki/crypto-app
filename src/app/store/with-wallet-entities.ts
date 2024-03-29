@@ -89,34 +89,14 @@ export function withWalletEntities<Entity>(
 
         updateLastViewed(code: string): void {
           const coins = state.lastViewed();
-          // const isInCollection = coins.find(c => c === code);
-          
-          console.log(coins);
-          // if (isInCollection) {
-          //   return;
-          // }
-
           coins.push(code);
-          const uniqueValues = [...new Set(coins)]
-          console.log(coins, uniqueValues);
-          // if (coins.length > 20) {
-          //   coins.shift();
-          // }
-          patchState(state, { lastViewed: uniqueValues });
+     
+          patchState(state, { lastViewed: [...new Set(coins)] });
         },
 
         loadLastViewed: rxMethod<string>(pipe(
-          switchMap((res) => {
-            // patchState(state, { lastViewed: res.map(coin => coin.code) });
-            return cmcService.getCoinsFromWallet(res);
-          }),
-          map((res) => {
-            console.log('LOAD LAST VIEWEED', state.lastViewed());
-
-            // return Object.keys(res.data).map(key => res.data[key])
-            return state.lastViewed().map(key => res.data[key])
-            return res;
-          }),
+          switchMap((res) => cmcService.getCoinsFromWallet(res)),
+          map((res) => state.lastViewed().map(key => res.data[key])),
           tapResponse({
             next: ((res) => patchState(state, { test: res as ICryptoCurrency[] })),
             error: console.error
