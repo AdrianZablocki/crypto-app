@@ -24,18 +24,18 @@ export class CmcService {
 
     return this.http.get<ICMCListResponse>(`${this.cmcBaseUrl}listings/latest`, { headers: this.CMCheaders, params });
   }
-  getCoinsFromWallet(query: string): Observable<ICMCWalletListResponse> {
+  getCoinsBySymbol(query: string): Observable<ICMCWalletListResponse> {
     const params = new HttpParams()
       .set('symbol', query);
 
     return this.http.get<ICMCWalletListResponse>(`${this.cmcBaseUrl}quotes/latest`, { headers: this.CMCheaders, params });
   }
 
-  getIconUrl(id: number): string {
+  getCoinIcon(id: number): string {
     return `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`;
   }
 
-  getWallet(): Observable<IWallet> {
+  getCoinsFromWallet(): Observable<IWallet> {
     const params = new HttpParams()
       .set('id', 1);
 

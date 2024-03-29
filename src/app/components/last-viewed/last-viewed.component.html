@@ -6,7 +6,7 @@
     <div class="wrapper">
       @for (item of data; track item) {
         <div class="item">
-          <img [src]="getIconUrl(item.id)" [alt]="item.name" class="item-image">
+          <img [src]="getCoinIcon(item.id)" [alt]="item.name" class="item-image">
           <div class="item-symbol">{{ item.symbol }}</div>
           <div
             class="item-change"

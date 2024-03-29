@@ -3,7 +3,7 @@
     <ion-item [class]="item.name" color="primary">
 
       <ion-label>
-        <img [src]="getIconUrl(item.id)" [alt]="item.name" class="image">
+        <img [src]="getCoinIcon(item.id)" [alt]="item.name" class="image">
         <div>
           <div class="name">{{ item.name }}</div>
           @switch (selectedItemType) {

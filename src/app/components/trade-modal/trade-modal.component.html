@@ -28,7 +28,7 @@
         <div class="item">
           <div>
             <div class="item-symbol">
-              <img [src]="getIconUrl(data.id)" [alt]="data.name">
+              <img [src]="getCoinIcon(data.id)" [alt]="data.name">
               <div>{{data.symbol}}</div>
             </div>
             <div class="item-balance">Balance: {{data.amount}}</div>

@@ -69,8 +69,8 @@ export class ModalBaseDirective {
     return this.enterAnimation(baseEl).direction('reverse');
   };
 
-  getIconUrl(id: number): string {
-    return this.cmcService.getIconUrl(id);
+  getCoinIcon(id: number): string {
+    return this.cmcService.getCoinIcon(id);
   }
 
 }

@@ -51,7 +51,7 @@
       <div class="coin">
         <div class="coin-name">{{ data.name }}</div>
         <div class="coin-icon">
-          <img [alt]="data.name" [src]="getIconUrl(data.id)" />
+          <img [alt]="data.name" [src]="getCoinIcon(data.id)" />
         </div>
       </div>
       <div class="coin-short-name">{{ data.symbol }}</div>

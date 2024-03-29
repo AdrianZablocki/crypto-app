@@ -17,8 +17,8 @@ export interface WithWalletEntityState<Entity> {
 
 export function withWalletEntities<Entity>(
   Loader: ProviderToken<{
-    getWallet: () => Observable<{ currencies: WalletCoin[], balance: number }>;
-    getCoinsFromWallet: (coinIds: string) => Observable<{ data: { [key: string]: Entity } }>;
+    getCoinsFromWallet: () => Observable<{ currencies: WalletCoin[], balance: number }>;
+    getCoinsBySymbol: (coinIds: string) => Observable<{ data: { [key: string]: Entity } }>;
     getCoins: () => Observable<ICMCListResponse> 
   }>
 ) {
@@ -38,10 +38,10 @@ export function withWalletEntities<Entity>(
       return {
 
         load: rxMethod<null>(pipe( // TODO add dynamic parameters to cmc
-          switchMap(() => cmcService.getWallet()),
+          switchMap(() => cmcService.getCoinsFromWallet()),
           switchMap((res) => {
             patchState(state, { wallet: res.currencies, balance: res.balance, lastViewed: res.currencies.map(c => c.code) });
-            return cmcService.getCoinsFromWallet(
+            return cmcService.getCoinsBySymbol(
               res.currencies.map(coin => coin.code).join(',')
             );
           }),
@@ -55,7 +55,7 @@ export function withWalletEntities<Entity>(
         loadWallet: rxMethod<WalletCoin[]>(pipe(
           switchMap((res) => {
             patchState(state, { lastViewed: res.map(coin => coin.code) });
-            return cmcService.getCoinsFromWallet(res.map(coin => coin.code).join(','));
+            return cmcService.getCoinsBySymbol(res.map(coin => coin.code).join(','));
           }),
           map((res) => getAmount(res, state)),
           tapResponse({
@@ -95,7 +95,7 @@ export function withWalletEntities<Entity>(
         },
 
         loadLastViewed: rxMethod<string>(pipe(
-          switchMap((res) => cmcService.getCoinsFromWallet(res)),
+          switchMap((res) => cmcService.getCoinsBySymbol(res)),
           map((res) => state.lastViewed().map(key => res.data[key])),
           tapResponse({
             next: ((res) => patchState(state, { test: res as ICryptoCurrency[] })),

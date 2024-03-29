@@ -24,8 +24,8 @@ export class LastViewedComponent {
 
   constructor(private cmcService: CmcService) { }
 
-  getIconUrl(id: number): string {
-    return this.cmcService.getIconUrl(id);
+  getCoinIcon(id: number): string {
+    return this.cmcService.getCoinIcon(id);
   }
 
 }
