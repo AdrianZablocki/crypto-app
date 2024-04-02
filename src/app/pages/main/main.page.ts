@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, TemplateRef, ViewChild, computed, inject } from '@angular/core';
+import { AfterViewInit, Component, TemplateRef, ViewChild, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
 import {
@@ -38,21 +38,12 @@ export class MainPage implements AfterViewInit {
   modalType = ModalTypeEnum;
   listItemType = ListItemTypeEnum;
   segmentsConfig = [
-    // { id: 'discovery', name: 'Discovery' },
     { id: 'wallet', name: 'Wallet' },
     { id: 'discovery', name: 'Discovery' }
   ];
 
-  store = inject(WalletStore);
-
-  // TODO remove after tests
-  // test = computed(() => {
-  //   const selectedCoins = this.store.selectedCoin();
-  //   return {
-  //     coin: selectedCoins.coins,
-  //     user: selectedCoins.userId
-  //   }
-  // });
+  private store = inject(WalletStore);
+  data = this.store.walletData;
 
   ngAfterViewInit(): void {
     this.segmentsConfig = SegmentsTabsHelper.mapTmpl(
@@ -69,23 +60,13 @@ export class MainPage implements AfterViewInit {
     this.openedModalType = modalType;
   }
 
-  onSegmentChange(segmentName: any): void {
-    if (segmentName === 'discovery') {
-      this.store.loadCryptoList(null);
-    }
-  }
+  onCloseModal(isOpen: boolean): void {
+    this.isModalOpen = isOpen;
 
-  test123(e: any): void {
-
-    this.isModalOpen = e;
-
-    console.log(e);
-    if (!e) {
+    if (!isOpen) {
       this.store.updateLastViewed(this.selectedItem.symbol);
       this.store.saveToLocalStorage();
-      this.store.loadLastViewed(this.store.lastViewed().join(','));
     }
-
   }
 
 }

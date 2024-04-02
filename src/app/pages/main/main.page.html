@@ -1,19 +1,20 @@
 <app-toolbar></app-toolbar>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <!-- TODO add ballance wit chart -->
+
   <div class="segments">
     <app-segments-tabs
       [tabConfig]="segmentsConfig"
-      (switchTo)="onSegmentChange($event)"
     ></app-segments-tabs>
   </div>
 </ion-content>
 
 <!-- SEGMENTS -->
 <ng-template #walletTmpl>
-  @if(store.entities().length) {
+  @if(data()?.walletCoins) {
     <ion-list mode="ios" [inset]="true">
-      @for (item of store.entities(); track item.name) {
+      @for (item of data()?.walletCoins; track item) {
         <app-list-item
           [selectedItemType]="listItemType.WALLET"
           [item]="item"
@@ -29,7 +30,7 @@
 </ng-template>
 
 <ng-template #discoveryTmpl>
-  <app-last-viewed [data]="store.loadedLastViewed()"></app-last-viewed>
+  <app-last-viewed [data]="data()?.lastViewed"></app-last-viewed>
 
   <!-- <div>Staking</div>
   <div>Edukacja</div>
@@ -38,9 +39,9 @@
   <div>Kolekcje</div>
   <div>Wszystkie kryptowaluty (10 na karcie  + wyświetl wszystko)</div> -->
 
-  @if(store.allCryptocurrencies().length) {
+  @if(data()?.entities) {
     <ion-list mode="ios" [inset]="true">
-      @for (item of store.allCryptocurrencies(); track item.name) {
+      @for (item of data()?.entities; track item.name) {
         <app-list-item
           [selectedItemType]="listItemType.TRADE"
           [item]="item"
@@ -58,7 +59,5 @@
   [selectedModalType]="openedModalType"
   [isOpen]="isModalOpen"
   [data]="selectedItem"
-  
-  (openModal)="test123($event)"
+  (openModal)="onCloseModal($event)"
 ></app-modal>
-<!-- (openModal)="isModalOpen = $event" -->

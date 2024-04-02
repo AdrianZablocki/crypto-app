@@ -1,4 +1,5 @@
 import { patchState, signalStore, withHooks } from '@ngrx/signals';
+import { interval, tap } from 'rxjs';
 
 import { CmcService } from 'src/app/services';
 import { withWalletEntities } from './with-wallet-entities';
@@ -14,16 +15,22 @@ export const WalletStore = signalStore(
         const wallet = JSON.parse(localStorage.getItem('wallet') || '').wallet;
         const lastViewed = JSON.parse(localStorage.getItem('wallet') || '').lastViewed;
 
-        if (wallet) {
-          store.loadWallet(wallet);
-        }
+        pollingEntities(store); //TODO try to use rxjs MonoTypeOperatorFunction
 
-        if (lastViewed) {
-          patchState(store,  { lastViewed });
+        if (wallet && lastViewed) {
+          patchState(store,  { wallet, lastViewed });
         }
         return;
       }
       store.load(null);
+
+      pollingEntities(store);
     }
   })
 )
+
+export function pollingEntities(store: any): void {
+  interval(10000).pipe(
+    tap(() => store.loadEntities(null))
+  ).subscribe();
+}

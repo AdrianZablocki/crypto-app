@@ -5,7 +5,8 @@
 
     <div class="wrapper">
       @for (item of data; track item) {
-        <div class="item">
+        @if (item) {
+          <div class="item">
           <img [src]="getCoinIcon(item.id)" [alt]="item.name" class="item-image">
           <div class="item-symbol">{{ item.symbol }}</div>
           <div
@@ -16,6 +17,8 @@
             {{ item.quote.USD.percent_change_24h | number : '1.2-2' }}%
           </div>
         </div>
+        }
+        
       } @empty {
         Empty list of coins
       }

@@ -20,7 +20,7 @@ import { CmcService } from 'src/app/services';
   ]
 })
 export class LastViewedComponent {
-  @Input() data!: ICryptoCurrency[];
+  @Input() data: (ICryptoCurrency | undefined)[] | undefined = [] as ICryptoCurrency[];
 
   constructor(private cmcService: CmcService) { }
 

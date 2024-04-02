@@ -16,7 +16,7 @@ import { CmcService } from 'src/app/services';
   ]
 })
 export class ListItemComponent {
-  @Input() item!: ICryptoCurrency;
+  @Input() item: ICryptoCurrency | undefined = {} as ICryptoCurrency;
   @Input() selectedItemType: ListItemType = ListItemTypeEnum.WALLET;
 
   @Output() selectItem = new EventEmitter<ICryptoCurrency>();

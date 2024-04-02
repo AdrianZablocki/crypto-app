@@ -19,7 +19,7 @@ export class CmcService {
   getCoins(): Observable<ICMCListResponse> {
     const params = new HttpParams()
       .set('start', '1')
-      .set('limit', '50')
+      .set('limit', '100')
       .set('convert', 'USD');
 
     return this.http.get<ICMCListResponse>(`${this.cmcBaseUrl}listings/latest`, { headers: this.CMCheaders, params });

@@ -43,15 +43,20 @@
 }
 
 <ng-template #tradeDataTmpl>
-  <div>{{ item.quote.USD.price | currency : 'USD' : 'symbol' }}</div>
-  <ng-container *ngTemplateOutlet="percentageChangeTmpl; context: { change: item.quote.USD.percent_change_24h }"></ng-container>
+
+  @if (item) {
+    <div>{{ item.quote.USD.price | currency : 'USD' : 'symbol' }}</div>
+    <ng-container *ngTemplateOutlet="percentageChangeTmpl; context: { change: item.quote.USD.percent_change_24h }"></ng-container>
+  }
 </ng-template>
 
 <ng-template #walletDataTmpl>
-  @if (item.amount) {
+  @if (item && item.amount) {
     <div>{{ item.amount * item.quote.USD.price | currency : 'USD' : 'symbol' }}</div>
   }
-  <ng-container *ngTemplateOutlet="percentageChangeTmpl; context: { change: item.quote.USD.percent_change_60d }"></ng-container>
+  @if (item) {
+    <ng-container *ngTemplateOutlet="percentageChangeTmpl; context: { change: item.quote.USD.percent_change_60d }"></ng-container>
+  }
 </ng-template>
 
 <ng-template #percentageChangeTmpl let-change="change">

@@ -2,7 +2,7 @@ import { ProviderToken, computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStoreFeature, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { Observable, map, pipe, switchMap } from 'rxjs';
+import { MonoTypeOperatorFunction, Observable, pipe, switchMap, switchMapTo, tap, timer } from 'rxjs';
 import { ICMCListResponse, ICryptoCurrency, WalletCoin } from '../models';
 
 export interface WithWalletEntityState<Entity> {
@@ -10,9 +10,7 @@ export interface WithWalletEntityState<Entity> {
   userId: string;
   wallet: WalletCoin[];
   balance: number;
-  allCryptocurrencies: ICryptoCurrency[]; // TODO move to cryptocurrencies store
   lastViewed: string[];
-  loadedLastViewed: ICryptoCurrency[];
 }
 
 export function withWalletEntities<Entity>(
@@ -28,46 +26,29 @@ export function withWalletEntities<Entity>(
       userId: '',
       wallet: [] as WalletCoin[],
       balance: 0,
-      allCryptocurrencies: [] as ICryptoCurrency[],
       lastViewed: [] as string[],
-      loadedLastViewed: []  as ICryptoCurrency[]
     }),
     withMethods(state => {
       const cmcService = inject(Loader);
 
       return {
 
-        load: rxMethod<null>(pipe( // TODO add dynamic parameters to cmc
+        load: rxMethod<null>(pipe(
           switchMap(() => cmcService.getCoinsFromWallet()),
           switchMap((res) => {
             patchState(state, { wallet: res.currencies, balance: res.balance, lastViewed: res.currencies.map(c => c.code) });
-            return cmcService.getCoinsBySymbol(
-              res.currencies.map(coin => coin.code).join(',')
-            );
+            return cmcService.getCoins();
           }),
-          map((res) => getAmount(res, state)),
           tapResponse({
-            next: ((res) => patchState(state, { entities: res as Entity[] })),
+            next: ((res) => patchState(state, { entities: res.data as Entity[]})),
             error: console.error
           })
         )),
 
-        loadWallet: rxMethod<WalletCoin[]>(pipe(
-          switchMap((res) => {
-            patchState(state, { lastViewed: res.map(coin => coin.code) });
-            return cmcService.getCoinsBySymbol(res.map(coin => coin.code).join(','));
-          }),
-          map((res) => getAmount(res, state)),
-          tapResponse({
-            next: ((res) => patchState(state, { entities: res as Entity[] })),
-            error: console.error
-          })
-        )),
-
-        loadCryptoList: rxMethod<null>(pipe(
+        loadEntities: rxMethod<null>(pipe(
           switchMap(() => cmcService.getCoins()),
           tapResponse({
-            next: ((res) => patchState(state, { allCryptocurrencies: res.data })),
+            next: ((res) => patchState(state, { entities: res.data as Entity[]})),
             error: console.error
           })
         )),
@@ -94,33 +75,44 @@ export function withWalletEntities<Entity>(
           patchState(state, { lastViewed: [...new Set(coins)] });
         },
 
-        loadLastViewed: rxMethod<string>(pipe(
-          switchMap((res) => cmcService.getCoinsBySymbol(res)),
-          map((res) => state.lastViewed().map(key => res.data[key])),
-          tapResponse({
-            next: ((res) => patchState(state, { loadedLastViewed: res as ICryptoCurrency[] })),
-            error: console.error
-          })
-        )),
       }
     }),
     withComputed(state => {
       return {
-        selectedCoin: computed(() => {
-          const coinId = 1;
-          return {
-            coins: state.entities().length ? state.entities().filter((coin: any) => coin.id === coinId) : [],
-            userId: state.userId()
+        walletData: computed(() => {
+          if (state.entities()?.length) {
+
+            let coins = state.wallet().map(
+              coin => state.entities().find((entity) => (entity as ICryptoCurrency).symbol === coin.code)
+            );
+
+            coins = getAmount(coins as ICryptoCurrency[], state);
+
+            return {
+              walletCoins: coins,
+              ballance: state.balance(),
+              lastViewed: state.lastViewed().map(
+                coin => state.entities().find((entity) => (entity as ICryptoCurrency).symbol === coin)
+              ),
+              entities: state.entities()
+            }
           }
+          
+          return
         })
       }
     }),
   )
 }
 
-function getAmount<Entity>(response: { data: { [key: string]: Entity }}, state: any): Entity[] {
-  return Object.keys(response.data).map(key => ({ 
-    ...response.data[key], 
-    amount: state.wallet().find((c: WalletCoin) => c.code === key)?.amount 
-  }));
+function getAmount<Entity>(response: ICryptoCurrency[], state: any): Entity[] {
+  return response.map((coin: ICryptoCurrency) => ({ 
+    ...coin, 
+    amount: state.wallet().find((c: WalletCoin) => c.code === coin.symbol)?.amount 
+  })) as Entity[];
+}
+
+//TODO try to use
+export function poll<T>(pollInterval: number): MonoTypeOperatorFunction<T> {
+  return source$ => timer(0, pollInterval).pipe(switchMapTo(source$));
 }

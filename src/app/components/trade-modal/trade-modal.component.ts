@@ -58,7 +58,7 @@ export class TradeModalComponent extends ModalBaseDirective implements OnInit {
         : this.store.balance() + this.form.get('balanceInput')?.value
     );
     this.store.saveToLocalStorage();
-    this.store.loadWallet(this.store.wallet());
+    // this.store.loadWallet(this.store.wallet());
 
     this.form.patchValue({
       balanceInput: 0,
